@@ -1,0 +1,8 @@
+*.sqlite3
+static/
+media/
+.idea/
+
+test*
+*.log
+DjangoProjectSettings/setting*
