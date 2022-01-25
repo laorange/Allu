@@ -1,4 +1,5 @@
 from django.db import models
+from uuslug import slugify
 
 semester_choice = [('1', '大一上'), ('2', '大一下'),
                    ('3', '大二上'), ('4', '大二下'),
@@ -61,14 +62,20 @@ class CourseInfo(models.Model):
 class Teacher(models.Model):
     teacher_id = models.AutoField(primary_key=True, help_text="id")
     name = models.CharField(verbose_name="姓名", max_length=100, unique=True, help_text="授课教师姓名")
+    slug = models.CharField(max_length=300, blank=True, null=True)
     validity = models.BooleanField(verbose_name="是否生效", default=True, help_text="是否参与当前教学计划")
 
     class Meta:
         verbose_name = '授课教师'
         verbose_name_plural = verbose_name
 
+    def save(self, **kwargs):
+        slug = slugify(self.name)
+        self.slug = slug if slug else f"teacher{self.teacher_id}"
+        super(Teacher, self).save(**kwargs)
+
     def __str__(self):
-        return self.name
+        return self.name + f" ({self.slug})"
 
 
 class Group(models.Model):

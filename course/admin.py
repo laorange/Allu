@@ -21,7 +21,8 @@ class CourseInfoAdmin(admin.ModelAdmin):
 
 @admin.register(Teacher)
 class TeacherAdmin(admin.ModelAdmin):
-    list_display = ('name',)
+    list_display = ('name', 'slug')
+    ordering = ['slug']
 
     def has_delete_permission(self, *args):
         return False
