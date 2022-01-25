@@ -23,6 +23,9 @@ class CourseInfoAdmin(admin.ModelAdmin):
 class TeacherAdmin(admin.ModelAdmin):
     list_display = ('name',)
 
+    def has_delete_permission(self, *args):
+        return False
+
 
 @admin.register(Group)
 class GroupAdmin(admin.ModelAdmin):
@@ -64,4 +67,3 @@ class CourseAdmin(admin.ModelAdmin):
     # add_form_template = ...
     # change_form_template = ...
     pass
-

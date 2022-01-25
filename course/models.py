@@ -8,10 +8,10 @@ semester_choice = [('1', '大一上'), ('2', '大一下'),
                    ('11', "S5"), ('12', "S6"),
                    ('13', "S7"), ('14', "S8")]
 
-method_choice = [("理论课", "Course"),
-                 ("习题课", "TD"),
-                 ("实验课", "TP"),
-                 ("考试", "DS")]
+method_choice = [("Course", "理论课"),
+                 ("TD", "习题课"),
+                 ("TP", "实验课"),
+                 ("DS", "考试")]
 
 which_lesson_choice = [("1", "第1,2节课"),
                        ("2", "第3,4节课"),
@@ -93,14 +93,14 @@ class CoursePlan(models.Model):
     info = models.ForeignKey(verbose_name="课程信息", to="CourseInfo", on_delete=models.CASCADE,
                              related_name="info_plan", help_text="FK-CourseInfo")
     groups = models.ManyToManyField(verbose_name="分组", to="Group", related_name="group_plan", help_text="M2M Plan&Group")
-    method = models.CharField(verbose_name="授课方式", max_length=8, choices=method_choice, help_text="授课方式")
+    method = models.CharField(verbose_name="授课方式", max_length=8, choices=method_choice, help_text="Course/TD/TP/DS")
 
     class Meta:
         verbose_name = '教学计划'
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return "_".join([self.info.ch_name, self.method, self.teacher.name])
+        return "_".join([self.info.ch_name, self.get_method_display(), self.teacher.name])
 
 
 class Classroom(models.Model):
@@ -154,3 +154,6 @@ class Course(models.Model):
     class Meta:
         verbose_name = '排课记录'
         verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return "_".join([self.date.strftime("%Y-%m-%d "), self.get_which_lesson_display(), self.plan.__str__()])
