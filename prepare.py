@@ -1,11 +1,9 @@
 import os
-# import time
 from datetime import datetime
 
 import django
 from tqdm import tqdm
 
-# from DarkLighter.settings import BASE_DIR
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'DjangoProjectSettings.settings')
 
 django.setup()
@@ -288,7 +286,8 @@ def prepare_classroom():
 
 def prepare_group():
     for g in tqdm(class_descriptions):
-        Group.objects.get_or_create(semester=str(g[2]).strip(), name=str(g[4]).strip(), defaults=dict(period=30))
+        Group.objects.get_or_create(semester=int(str(g[2]).strip()), name=str(g[4]).strip(), period=30)
+        Group.objects.get_or_create(semester=int(str(g[2]).strip()), name=str(g[4]).strip(), period=31)
 
 
 def prepare_type():
@@ -298,7 +297,11 @@ def prepare_type():
 
 def prepare_lesson_info():
     for li in tqdm(lesson_list):
-        CourseInfo.objects.get_or_create(ch_name=li[2], defaults=dict(period=30, code=li[0], en_name=li[1], type_id=li[4], semester=str(li[3])))
+        semester = int(li[3])
+        if semester % 2 == 0:
+            CourseInfo.objects.get_or_create(ch_name=li[2], defaults=dict(period=30, code=li[0], en_name=li[1], type_id=li[4], semester=semester))
+        else:
+            CourseInfo.objects.get_or_create(ch_name=li[2], defaults=dict(period=31, code=li[0], en_name=li[1], type_id=li[4], semester=semester))
 
 
 def prepare_semester_config():

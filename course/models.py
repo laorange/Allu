@@ -1,28 +1,34 @@
 from django.db import models
 from uuslug import slugify
 
-semester_choice = [('1', '大一上'), ('2', '大一下'),
-                   ('3', '大二上'), ('4', '大二下'),
-                   ('5', '大三上'), ('6', '大三下'),
-                   ('7', "S1"), ('8', "S2"),
-                   ('9', "S3"), ('10', "S4"),
-                   ('11', "S5"), ('12', "S6"),
-                   ('13', "S7"), ('14', "S8")]
+semester_choice = [(1, '大一上'), (2, '大一下'), (3, '大二上'),
+                   (4, '大二下'), (5, '大三上'), (6, '大三下'),
+                   (7, "S1"), (8, "S2"), (9, "S3"), (10, "S4"),
+                   (11, "S5"), (12, "S6"), (13, "S7"), (14, "S8")]
 
 method_choice = [("Course", "理论课"),
                  ("TD", "习题课"),
                  ("TP", "实验课"),
                  ("DS", "考试")]
 
-which_lesson_choice = [("1", "第1,2节课"),
-                       ("2", "第3,4节课"),
-                       ("3", "第5,6节课"),
-                       ("4", "第7,8节课"),
-                       ("5", "第9,10节课")]
+which_lesson_choice = [(1, "第1,2节课"),
+                       (2, "第3,4节课"),
+                       (3, "第5,6节课"),
+                       (4, "第7,8节课"),
+                       (5, "第9,10节课")]
 
 action_choice = [("Create", "新增"),
                  ("Update", "更新"),
                  ("Delete", "删除")]
+
+
+def get_period_display(period: int):
+    n1 = n2 = period // 2 + 7
+    if period % 2:
+        m1, m2, n2 = 9, 1, n2 + 1
+    else:
+        m1, m2 = 2, 7
+    return f"20{n1:0>2}.{m1:0>2}~20{n2:0>2}.{m2:0>2}"
 
 
 # Create your models here.
@@ -44,8 +50,8 @@ class CourseInfo(models.Model):
     type = models.ForeignKey(verbose_name="课程类型", to=CourseType, on_delete=models.CASCADE,
                              related_name="type_info", help_text="FK-CourseType")
     period = models.IntegerField(verbose_name="时期", help_text="从2007.9算起的第?学期")
-    semester = models.CharField(verbose_name="学期", max_length=8, choices=semester_choice,
-                                help_text="从大一上算起的第?学期 ∈ [1,14]")
+    semester = models.IntegerField(verbose_name="学期", choices=semester_choice,
+                                   help_text="从大一上算起的第?学期 ∈ [1,14]")
     code = models.CharField(max_length=100, default='', help_text='课程编号(如CS21,ES22)', blank=True, null=True)
     ch_name = models.CharField(verbose_name="中文名", max_length=100, unique=True, help_text="课程中文名")
     en_name = models.CharField(verbose_name="English", max_length=100, help_text="课程英语名", blank=True, null=True)
@@ -56,7 +62,7 @@ class CourseInfo(models.Model):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.ch_name
+        return f"({get_period_display(self.period)}){self.ch_name}"
 
 
 class Teacher(models.Model):
@@ -81,8 +87,8 @@ class Teacher(models.Model):
 class Group(models.Model):
     group_id = models.AutoField(primary_key=True, help_text="id")
     period = models.IntegerField(verbose_name="时期", help_text="从2007.9算起的第?学期")
-    semester = models.CharField(verbose_name="学期", max_length=8, choices=semester_choice,
-                                help_text="从大一上算起的第?学期 ∈ [1,14]")
+    semester = models.IntegerField(verbose_name="学期", choices=semester_choice,
+                                   help_text="从大一上算起的第?学期 ∈ [1,14]")
     name = models.CharField(verbose_name="分组名称", max_length=100, help_text="分组名称，例如：PA")
 
     class Meta:
@@ -90,17 +96,17 @@ class Group(models.Model):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.name
+        return f"({self.get_semester_display()}) " + self.name
 
 
 class CoursePlan(models.Model):
     plan_id = models.AutoField(primary_key=True, help_text="id")
-    teacher = models.ForeignKey(verbose_name="授课教师", to="Teacher", on_delete=models.CASCADE,
-                                related_name="teacher_plan", help_text="FK-Teacher")
     info = models.ForeignKey(verbose_name="课程信息", to="CourseInfo", on_delete=models.CASCADE,
                              related_name="info_plan", help_text="FK-CourseInfo")
-    groups = models.ManyToManyField(verbose_name="分组", to="Group", related_name="group_plan", help_text="M2M Plan&Group")
     method = models.CharField(verbose_name="授课方式", max_length=8, choices=method_choice, help_text="Course/TD/TP/DS")
+    groups = models.ManyToManyField(verbose_name="分组", to="Group", related_name="group_plan", help_text="M2M Plan&Group")
+    teacher = models.ForeignKey(verbose_name="授课教师", to="Teacher", on_delete=models.CASCADE,
+                                related_name="teacher_plan", help_text="FK-Teacher")
 
     class Meta:
         verbose_name = '教学计划'
@@ -141,7 +147,7 @@ class CourseChangeLog(models.Model):
 class SemesterConfig(models.Model):
     config_id = models.AutoField(primary_key=True, help_text="id")
     current_period = models.IntegerField(verbose_name="当前时期", help_text="从2007.9算起的第?学期")
-    week1_monday_date = models.DateTimeField(verbose_name="更新时间", help_text="本学期第一周星期一的日期")
+    week1_monday_date = models.DateTimeField(verbose_name="学期开始日期", help_text="本学期第一周星期一的日期")
 
     class Meta:
         verbose_name = '学期信息配置'
@@ -155,7 +161,7 @@ class Course(models.Model):
     room = models.ForeignKey(verbose_name="教室", to="Classroom", on_delete=models.CASCADE,
                              related_name="room_course", help_text="FK-Classroom")
     date = models.DateField(verbose_name="这节课的上课日期", help_text="这节课的上课日期")
-    which_lesson = models.CharField(verbose_name="第?节课", max_length=8, choices=which_lesson_choice, help_text="第?节课，∈[1,5]")
+    which_lesson = models.IntegerField(verbose_name="第?节课", choices=which_lesson_choice, help_text="第?节课，∈[1,5]")
     update_time = models.DateTimeField(verbose_name="更新时间", auto_now=True, help_text='该条记录的更新时间')
 
     class Meta:

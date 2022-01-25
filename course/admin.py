@@ -33,16 +33,19 @@ class GroupAdmin(admin.ModelAdmin):
     list_display = ('period', "semester", "name")
     ordering = ['period', "semester", "name"]
     list_filter = ['period', "semester"]
+    filter_horizontal = ['group_plan']
 
 
 @admin.register(CoursePlan)
 class CoursePlanAdmin(admin.ModelAdmin):
     list_display = ('info', "method", "teacher")
+    filter_horizontal = ['groups']
 
 
 @admin.register(Classroom)
 class ClassroomAdmin(admin.ModelAdmin):
-    pass
+    list_display = ['name']
+    ordering = ['name']
 
 
 @admin.register(CourseChangeLog)
@@ -54,7 +57,11 @@ class CourseChangeLogAdmin(admin.ModelAdmin):
 
 @admin.register(SemesterConfig)
 class SemesterConfigAdmin(admin.ModelAdmin):
-    list_display = ["current_period", "week1_monday_date"]
+    list_display = ["current_period", 'xxxx_xx_xxxx_xx', "week1_monday_date"]
+
+    @staticmethod
+    def xxxx_xx_xxxx_xx(obj):
+        return get_period_display(obj.current_period)
 
     def has_add_permission(self, *args):
         return False

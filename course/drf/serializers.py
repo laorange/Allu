@@ -50,7 +50,17 @@ class GroupSerializer(serializers.ModelSerializer):
         fields = ['group_id', 'period', 'semester', 'name']
 
 
+# CoursePlan.objects.get().groups.all()
 class CoursePlanSerializer(serializers.ModelSerializer):
+    groups = serializers.SerializerMethodField()
+
+    @staticmethod
+    def get_groups(obj):
+        for group in obj.groups.all():
+            print(group.name)
+
+        return "&".join([group.name for group in obj.groups.all()])
+
     class Meta:
         model = CoursePlan
         fields = ['plan_id', 'teacher', 'info', 'groups', 'method']

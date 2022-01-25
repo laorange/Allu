@@ -46,8 +46,17 @@ class GroupFilter(MyFilter):
 class CoursePlanFilter(MyFilter):
     group_name = django_filters.CharFilter(field_name='groups__name', lookup_expr='icontains', help_text='检索分组名')
 
+    teacher_name = django_filters.CharFilter(field_name='teacher__name', lookup_expr='icontains', help_text='检索老师姓名')
+    type_id = django_filters.NumberFilter(field_name='info__type_id', help_text='检索课程分类id')
+    period = django_filters.NumberFilter(field_name='info__period', help_text='检索时期(从2007.9算起的第?学期)')
+    semester = django_filters.NumberFilter(field_name='info__semester', help_text='检索开课学期 ∈ [1,14]')
+    ch_name = django_filters.CharFilter(field_name='info__ch_name', lookup_expr='icontains', help_text='检索课程中文名')
+    en_name = django_filters.CharFilter(field_name='info__en_name', lookup_expr='icontains', help_text='检索课程英语名')
+    fr_name = django_filters.CharFilter(field_name='info__fr_name', lookup_expr='icontains', help_text='检索课程法语名')
+
     class Meta(CoursePlanSerializer.Meta):
-        fields = CoursePlanSerializer.Meta.fields + ["group_name"]
+        fields = CoursePlanSerializer.Meta.fields + ["group_name", "teacher_name", 'type_id', 'period',
+                                                     'semester', 'ch_name', 'en_name', 'fr_name']
 
 
 class ClassroomFilter(MyFilter):
@@ -74,7 +83,8 @@ class CourseFilter(MyFilter):
     update_before = django_filters.DateTimeFilter(field_name='update_time', lookup_expr='lte', help_text='更新时间不晚于...')
 
     type_id = django_filters.NumberFilter(field_name='plan__info__type_id', help_text='检索课程分类id')
-    semester = django_filters.CharFilter(field_name='plan__info__semester', help_text='检索开课学期 ∈ [1,14]')
+    period = django_filters.NumberFilter(field_name='plan__info__period', help_text='检索时期(从2007.9算起的第?学期)')
+    semester = django_filters.NumberFilter(field_name='plan__info__semester', help_text='检索开课学期 ∈ [1,14]')
     ch_name = django_filters.CharFilter(field_name='plan__info__ch_name', lookup_expr='icontains', help_text='检索课程中文名')
     en_name = django_filters.CharFilter(field_name='plan__info__en_name', lookup_expr='icontains', help_text='检索课程英语名')
     fr_name = django_filters.CharFilter(field_name='plan__info__fr_name', lookup_expr='icontains', help_text='检索课程法语名')
@@ -86,7 +96,7 @@ class CourseFilter(MyFilter):
     class Meta(CourseSerializer.Meta):
         fields = ['course_id', 'plan', 'room', 'date', 'which_lesson',
                   "after", "before", "update_after", "update_before",
-                  'type_id', 'semester', 'ch_name', 'en_name',
+                  'type_id', 'semester', 'period', 'ch_name', 'en_name',
                   'fr_name', 'teacher_id', 'teacher_name', 'method']
 
 
