@@ -85,10 +85,15 @@ class CourseChangeLogSerializer(serializers.ModelSerializer):
 
 class SemesterConfigSerializer(serializers.ModelSerializer):
     week1_monday_date = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S')
+    current_period_display = serializers.SerializerMethodField()
+
+    @staticmethod
+    def get_current_period_display(obj):
+        return get_period_display(obj.current_period)
 
     class Meta:
         model = SemesterConfig
-        fields = ["current_period", "week1_monday_date"]
+        fields = ["current_period", "current_period_display", "week1_monday_date"]
 
 
 class CourseSerializer(serializers.ModelSerializer):
