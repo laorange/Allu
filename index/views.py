@@ -15,7 +15,7 @@ def index_view(request):
             self.name = name
 
     funcs: List[IndexFunction] = [
-        IndexFunction("/course/", "/static/index/timetable.svg", "查看课表"),
+        IndexFunction("/course/", "/static/index/timetable.svg", "查看课表<br>(施工中)"),
         IndexFunction("/admin/", "/static/index/admin.svg", "信息管理"),
         IndexFunction("/course/api/", "/static/index/API.svg", "API"),
         IndexFunction("/help/", "/static/index/info.svg", "使用帮助"),

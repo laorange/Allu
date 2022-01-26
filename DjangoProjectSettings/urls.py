@@ -28,5 +28,5 @@ urlpatterns = [
 
     path(r'', include('index.urls')),
     path(r'course/', include('course.urls')),
-    path(r'help/', include_docs_urls(title='一份简单的接口说明', description="中欧航空工程师学院 课程管理系统")),
+    path(r'help/', include_docs_urls(title='接口文档', description="中欧航空工程师学院 课程管理系统")),
 ]
