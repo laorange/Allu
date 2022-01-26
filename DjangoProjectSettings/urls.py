@@ -26,6 +26,7 @@ urlpatterns = [
     path(r'favicon.ico', RedirectView.as_view(url=r'static/favicon.ico')),
     re_path(r'^static/(?P<path>.*)$', static.serve, {'document_root': settings.STATIC_ROOT}, name='static'),
 
-    path(r'', include('course.urls')),
+    path(r'', include('index.urls')),
+    path(r'course/', include('course.urls')),
     path(r'help/', include_docs_urls(title='一份简单的接口说明', description="中欧航空工程师学院 课程管理系统")),
 ]
