@@ -1,5 +1,7 @@
+import datetime
 from typing import List
 
+from course.models import *
 from django.shortcuts import render
 
 
@@ -14,8 +16,25 @@ def index_view(request):
             self.img_path = img_path
             self.name = name
 
-    funcs: List[IndexFunction] = [
-        IndexFunction("/course/", "/static/index/timetable.svg", "查看课表<br>(施工中)"),
+    funcs: List[IndexFunction] = []
+
+    # semester_config = SemesterConfig.objects.get(config_id=1)
+    # # semester_config.current_period
+    # period_b = 1 - (semester_config.current_period % 2)
+    # # week = (semester_config.week1_monday_date - datetime.now()).min // 10080 + 1
+    # now = datetime.datetime.now()
+    # weekday = now.isoweekday()
+    # after = (datetime.datetime.now() - datetime.timedelta(days=weekday - 1)).strftime("%Y-%m-%d")
+    # before = (datetime.datetime.now() + datetime.timedelta(days=7 - weekday)).strftime("%Y-%m-%d")
+
+    # funcs += [
+    #     IndexFunction(f"/course/api/?semester={semester + period_b}&after={after}&before={before}",
+    #                   f"/static/index/timetable{_index + 1}.svg",
+    #                   semester_choice[semester - 1][1]) for _index, semester in enumerate(range(1, 12, 2))
+    # ]
+
+    funcs += [
+        IndexFunction("/course/", "/static/index/query.svg", "自定义查询<br>(施工中)"),
         IndexFunction("/admin/", "/static/index/admin.svg", "信息管理"),
         IndexFunction("/course/api/", "/static/index/API.svg", "API"),
         IndexFunction("/help/", "/static/index/info.svg", "使用帮助"),

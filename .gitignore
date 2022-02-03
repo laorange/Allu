@@ -143,4 +143,4 @@ media/
 .idea/
 
 test*
-DjangoProjectSettings/setting*
+DjangoProjectSettings/secret.py
