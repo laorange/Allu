@@ -86,7 +86,7 @@ class CourseChangeLogAdmin(ImportExportModelAdmin):
 
 @admin.register(SemesterConfig)
 class SemesterConfigAdmin(ImportExportModelAdmin):
-    list_display = ["current_period", 'xxxx_xx_xxxx_xx', "week1_monday_date"]
+    list_display = ["current_period", 'xxxx_xx_xxxx_xx', "week1_monday_date", "max_week"]
     resource_class = SemesterConfigResource
 
     @staticmethod
@@ -103,7 +103,7 @@ class SemesterConfigAdmin(ImportExportModelAdmin):
 @admin.register(Course)
 class CourseAdmin(ImportExportModelAdmin):
     date_hierarchy = 'date'
-    list_display = ["plan", "date", 'which_lesson']
+    list_display = ["plan", "date", 'which_lesson', "note"]
     ordering = ["date", 'which_lesson']
     list_filter = ["plan__info__period", "plan__info__semester", 'which_lesson']
     resource_class = CourseResource

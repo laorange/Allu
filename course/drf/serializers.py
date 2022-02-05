@@ -93,7 +93,7 @@ class SemesterConfigSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SemesterConfig
-        fields = ["current_period", "current_period_display", "week1_monday_date"]
+        fields = ["current_period", "current_period_display", "week1_monday_date", "max_week"]
 
 
 class CourseSerializer(serializers.ModelSerializer):
@@ -101,7 +101,7 @@ class CourseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Course
-        fields = ['course_id', 'plan', 'room', 'date', 'which_lesson', 'update_time']
+        fields = ['course_id', 'plan', 'room', 'date', 'which_lesson', 'update_time', "note"]
         depth = 3
 
 

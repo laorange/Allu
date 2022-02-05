@@ -148,6 +148,7 @@ class SemesterConfig(models.Model):
     config_id = models.AutoField(primary_key=True, help_text="id")
     current_period = models.IntegerField(verbose_name="当前时期", help_text="从2007.9算起的第?学期")
     week1_monday_date = models.DateTimeField(verbose_name="学期开始日期", help_text="本学期第一周星期一的日期")
+    max_week = models.IntegerField(verbose_name="最大周数", default=20, help_text="本学期共计多少周")
 
     class Meta:
         verbose_name = '学期信息配置'
@@ -162,7 +163,8 @@ class Course(models.Model):
                              related_name="room_course", help_text="FK-Classroom")
     date = models.DateField(verbose_name="这节课的上课日期", help_text="这节课的上课日期")
     which_lesson = models.IntegerField(verbose_name="第?节课", choices=which_lesson_choice, help_text="第?节课，∈[1,5]")
-    update_time = models.DateTimeField(verbose_name="更新时间", auto_now=True, help_text='该条记录的更新时间')
+    note = models.CharField(verbose_name="备注", max_length=255, blank=True, null=True, default=None, help_text="补充说明")
+    update_time = models.DateTimeField(verbose_name="更新时间", auto_now=True, help_text='这条记录的更新时间')
 
     class Meta:
         verbose_name = '排课记录'

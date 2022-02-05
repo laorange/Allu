@@ -287,7 +287,7 @@ def prepare_classroom():
 def prepare_group():
     for g in tqdm(class_descriptions):
         Group.objects.get_or_create(semester=int(str(g[2]).strip()), name=str(g[4]).strip(), period=30)
-        Group.objects.get_or_create(semester=int(str(g[2]).strip()), name=str(g[4]).strip(), period=31)
+        # Group.objects.get_or_create(semester=int(str(g[2]).strip()), name=str(g[4]).strip(), period=31)
 
 
 def prepare_type():
@@ -301,7 +301,7 @@ def prepare_lesson_info():
         if semester % 2 == 0:
             CourseInfo.objects.get_or_create(ch_name=li[2], defaults=dict(period=30, code=li[0], en_name=li[1], type_id=li[4], semester=semester))
         else:
-            CourseInfo.objects.get_or_create(ch_name=li[2], defaults=dict(period=31, code=li[0], en_name=li[1], type_id=li[4], semester=semester))
+            CourseInfo.objects.get_or_create(ch_name=li[2], defaults=dict(period=29, code=li[0], en_name=li[1], type_id=li[4], semester=semester))
 
 
 def prepare_semester_config():
