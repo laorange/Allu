@@ -24,6 +24,7 @@ from rest_framework.documentation import include_docs_urls
 urlpatterns = [
     path('admin/', admin.site.urls),
     path(r'favicon.ico', RedirectView.as_view(url=r'static/favicon.ico')),
+    path(r'robots.txt', RedirectView.as_view(url=r'static/robots.txt')),
     re_path(r'^static/(?P<path>.*)$', static.serve, {'document_root': settings.STATIC_ROOT}, name='static'),
 
     path(r'', include('index.urls')),

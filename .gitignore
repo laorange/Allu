@@ -138,7 +138,13 @@ dmypy.json
 cython_debug/
 
 *.sqlite3
-static/
+static/admin/
+static/import_export/
+static/index/
+static/rest_framework/
+static/*.js
+static/*.css
+static/*.html
 media/
 .idea/
 
