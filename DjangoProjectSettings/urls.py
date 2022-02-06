@@ -22,12 +22,14 @@ from django.views.generic import RedirectView
 from rest_framework.documentation import include_docs_urls
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    re_path(r'^static/(?P<path>.*)$', static.serve, {'document_root': settings.STATIC_ROOT}, name='static'),
     path(r'favicon.ico', RedirectView.as_view(url=r'static/favicon.ico')),
     path(r'robots.txt', RedirectView.as_view(url=r'static/robots.txt')),
-    re_path(r'^static/(?P<path>.*)$', static.serve, {'document_root': settings.STATIC_ROOT}, name='static'),
+
+    path('admin/', admin.site.urls),
+    path(r'help/', include_docs_urls(title='接口文档', description="中欧航空工程师学院 课程管理系统")),
+    path('dj-rest-auth/', include('dj_rest_auth.urls')),
 
     path(r'', include('index.urls')),
     path(r'course/', include('course.urls')),
-    path(r'help/', include_docs_urls(title='接口文档', description="中欧航空工程师学院 课程管理系统")),
 ]

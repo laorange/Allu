@@ -34,8 +34,10 @@ INSTALLED_APPS = [
     'corsheaders',
     'django_filters',
     'import_export',
-    'rest_framework',
     'uuslug',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'dj_rest_auth',
 
     # my app
     'index',
@@ -189,3 +191,4 @@ SIMPLEUI_HOME_INFO = False
 # SIMPLEUI_HOME_PAGE = "/"
 
 SECURE_SSL_REDIRECT = not DEBUG
+
