@@ -16,13 +16,13 @@ class DrfContainer:
         self.view_set = self.get_view_set()
 
     def get_view_set(self):
-        class TempViewSet(viewsets.ReadOnlyModelViewSet):
-            filter_backends = [DjangoFilterBackend]
+        parent_class = viewsets.ModelViewSet if "forpost" in self.name.lower() else viewsets.ReadOnlyModelViewSet
 
-        kwarg = dict(queryset=self.model.objects.all(),
+        kwarg = dict(filter_backends=[DjangoFilterBackend],
+                     queryset=self.model.objects.all(),
                      serializer_class=self.serializer) | ({"filter_class": self.filter} if self.filter else {})
 
-        return type(self.name, (TempViewSet,), kwarg)  # 临时类型 🐂 🍻
+        return type(self.name, (parent_class,), kwarg)  # 临时类型 🐂 🍻
 
 
 class CourseTypeSerializer(serializers.ModelSerializer):
@@ -50,7 +50,6 @@ class GroupSerializer(serializers.ModelSerializer):
         fields = ['group_id', 'period', 'semester', 'name']
 
 
-# CoursePlan.objects.get().groups.all()
 class CoursePlanSerializer(serializers.ModelSerializer):
     groups = serializers.SerializerMethodField()
 
@@ -65,6 +64,14 @@ class CoursePlanSerializer(serializers.ModelSerializer):
         model = CoursePlan
         fields = ['plan_id', 'teacher', 'info', 'groups', 'method']
         depth = 1
+
+
+class CoursePlanForPostSerializer(serializers.ModelSerializer):
+    groups = GroupSerializer(many=True)
+
+    class Meta:
+        model = CoursePlan
+        fields = ['teacher', 'info', 'groups', 'method']
 
 
 class ClassroomSerializer(serializers.ModelSerializer):
@@ -103,6 +110,14 @@ class CourseSerializer(serializers.ModelSerializer):
         model = Course
         fields = ['course_id', 'plan', 'room', 'date', 'which_lesson', 'update_time', "note"]
         depth = 3
+
+
+class CourseForPostSerializer(serializers.ModelSerializer):
+    update_time = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S')
+
+    class Meta:
+        model = Course
+        fields = ['plan', 'room', 'date', 'which_lesson', 'update_time', "note"]
 
 
 # --------- EXTRA DETAIL (2D 3D...) ---------
