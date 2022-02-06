@@ -14,9 +14,48 @@
             width: 100%;
             height: 100vh;
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
+            flex-direction: column;
             background-color: #efeeee;
+        }
+
+        header {
+            display: flex;
+            margin-top: 100px;
+            margin-bottom: 50px;
+            font-size: large;
+            text-align: center;
+        }
+
+        main {
+            flex: 1;
+            align-content: center;
+        }
+
+        footer {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            font-size: x-small;
+        }
+
+        footer .footerInfo {
+            display: flex;
+            margin-top: 5%;
+            width: 100%;
+            justify-content: center;
+        }
+
+        footer p {
+            display: flex;
+            justify-content: center;
+            flex: 100%;
+        }
+
+        footer a {
+            text-decoration: none;
+            color: #000000;
         }
 
         .container {
@@ -73,56 +112,14 @@
             width: 58px;
             transition: width 0.2s ease-out;
         }
-
-        .BottomCenter {
-            position: fixed;
-            text-align: center;
-            margin: 10px 0;
-            transform: translate(-50%, -50%);
-            bottom: 5vh;
-            left: 50%;
-            padding: 0 5px;
-            width: 100%;
-            height: 6vh;
-        }
-
-        .TopCenter {
-            position: fixed;
-            text-align: center;
-            margin: 10px 0;
-            transform: translate(-50%, -50%);
-            top: 10vh;
-            left: 50%;
-            padding: 0 5px;
-            width: 100%;
-            height: 6vh;
-        }
-
-        .BottomCenter p {
-            display: flex;
-            justify-content: center;
-            flex: 100%;
-        }
-
-        .BottomCenter a {
-            text-decoration: none;
-            color: #000000;
-        }
-
-        /*p.SiteInfo {
-            float: left;
-            height: 20px;
-            line-height: 20px;
-            margin: 0px 0px 0px 5px;
-        }*/
     </style>
 </head>
 <body>
-<div class="TopCenter">
+<header class="TopCenter">
     <h1>SIAE课程管理系统</h1>
-</div>
+</header>
 
-<div class="container">
+<main class="container">
     {% for func in functions %}
         <div class="box">
             <div class="img">
@@ -133,17 +130,18 @@
             <div class="ButtonName">{{ func.name|safe }}</div>
         </div>
     {% endfor %}
-</div>
+</main>
 
-<div class="BottomCenter">
+<footer>
     <div style="width:300px;margin:10px auto; padding:20px 0;">
-        <p class="SiteInfo">工信部备案号：<a href="https://beian.miit.gov.cn">津ICP备2020007681号-3</a></p>
-        <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=51012402000640"
-           style="display:inline-block;text-decoration:none;height:20px;line-height:20px;">
-            <img src="/static/index/beian.png" style="float:left;" alt="beian"/>
-            <p class="SiteInfo">川公网安备 51012402000640号</p></a>
+        <div class="footerInfo">工信部备案号：<a href="https://beian.miit.gov.cn">津ICP备2020007681号-3</a></div>
+        <div class="footerInfo">
+            <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=51012402000640">
+                <img src="https://quoi.top/static/index/beian.png" style="float:left;height: 75%" alt="beian"/>
+                <p class="SiteInfo">川公网安备 51012402000640号</p></a>
+        </div>
     </div>
-</div>
+</footer>
 <script>
 
 </script>
