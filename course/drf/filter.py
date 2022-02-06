@@ -1,5 +1,4 @@
 from typing import Dict
-
 import django_filters
 
 from .serializers import *
@@ -76,8 +75,10 @@ class CourseChangeLogFilter(MyFilter):
 
 
 class CourseFilter(MyFilter):
-    after = django_filters.DateFilter(field_name='date', lookup_expr='gte', help_text='上课时间不早于...')
-    before = django_filters.DateFilter(field_name='date', lookup_expr='lte', help_text='上课时间不晚于...')
+    # after = django_filters.DateFilter(field_name='date', lookup_expr='gte', help_text='上课时间不早于...')
+    # before = django_filters.DateFilter(field_name='date', lookup_expr='lte', help_text='上课时间不晚于...')
+
+    week = django_filters.NumberFilter(field_name='week', method="filter_week", help_text="本学期的第?周")
 
     update_after = django_filters.DateTimeFilter(field_name='update_time', lookup_expr='gte', help_text='更新时间不早于...')
     update_before = django_filters.DateTimeFilter(field_name='update_time', lookup_expr='lte', help_text='更新时间不晚于...')
@@ -93,9 +94,16 @@ class CourseFilter(MyFilter):
     teacher_name = django_filters.CharFilter(field_name='plan__teacher__name', lookup_expr='icontains', help_text='检索老师姓名')
     method = django_filters.CharFilter(field_name='plan__method', help_text='检索授课方式：Course/TD/TP/DS')
 
+    @staticmethod
+    def filter_week(queryset, name, value):
+        semester_config = SemesterConfig.objects.get(config_id=1)
+        after = (semester_config.week1_monday_date + datetime.timedelta(minutes=int(value - 1) * 10080)).date()
+        before = (semester_config.week1_monday_date + datetime.timedelta(minutes=int(value) * 10080)).date()
+        return queryset.filter(date__lt=before, date__gte=after)
+
     class Meta(CourseSerializer.Meta):
-        fields = ['course_id', 'plan', 'room', 'date', 'which_lesson',
-                  "after", "before", "update_after", "update_before",
+        fields = ['course_id', 'plan', 'room', 'date', 'which_lesson', "week",  # "after", "before",
+                  "update_after", "update_before",
                   'type_id', 'semester', 'period', 'ch_name', 'en_name',
                   'fr_name', 'teacher_id', 'teacher_name', 'method']
 
