@@ -1,3 +1,5 @@
+import datetime
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 from rest_framework import serializers
 from rest_framework import viewsets
 
@@ -5,6 +7,15 @@ from ..models import *
 from django.db.models import Model
 
 from django_filters.rest_framework import DjangoFilterBackend
+
+
+def datetime_now():
+    return datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+
+class CsrfExemptSessionAuthentication(SessionAuthentication):
+    def enforce_csrf(self, request):
+        return  # To not perform the csrf check previously happening
 
 
 class DrfContainer:
@@ -19,6 +30,7 @@ class DrfContainer:
         parent_class = viewsets.ModelViewSet if "forpost" in self.name.lower() else viewsets.ReadOnlyModelViewSet
 
         kwarg = dict(filter_backends=[DjangoFilterBackend],
+                     authentication_classes=(TokenAuthentication, CsrfExemptSessionAuthentication, BasicAuthentication),
                      queryset=self.model.objects.all(),
                      serializer_class=self.serializer) | ({"filter_class": self.filter} if self.filter else {})
 
@@ -50,6 +62,15 @@ class GroupSerializer(serializers.ModelSerializer):
         fields = ['group_id', 'period', 'semester', 'name']
 
 
+class GroupField(serializers.ModelSerializer):
+    def to_internal_value(self, data):
+        return Group.objects.get(id=data)
+
+    class Meta:
+        model = Group
+        fields = ['group_id']
+
+
 class CoursePlanSerializer(serializers.ModelSerializer):
     groups = serializers.SerializerMethodField()
 
@@ -64,14 +85,6 @@ class CoursePlanSerializer(serializers.ModelSerializer):
         model = CoursePlan
         fields = ['plan_id', 'teacher', 'info', 'groups', 'method']
         depth = 1
-
-
-class CoursePlanForPostSerializer(serializers.ModelSerializer):
-    groups = GroupSerializer(many=True)
-
-    class Meta:
-        model = CoursePlan
-        fields = ['teacher', 'info', 'groups', 'method']
 
 
 class ClassroomSerializer(serializers.ModelSerializer):
@@ -113,7 +126,7 @@ class CourseSerializer(serializers.ModelSerializer):
 
 
 class CourseForPostSerializer(serializers.ModelSerializer):
-    update_time = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S')
+    update_time = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S', default=datetime_now)
 
     class Meta:
         model = Course
