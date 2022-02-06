@@ -1,8 +1,6 @@
 from django.contrib import admin
-# from django import forms
 from import_export.admin import ImportExportModelAdmin
 
-# from .models import *
 from .resource import *
 
 # 修改网页title和站点header
@@ -58,7 +56,7 @@ class GroupAdmin(ImportExportModelAdmin):
 @admin.register(CoursePlan)
 class CoursePlanAdmin(ImportExportModelAdmin):
     # search_fields = ['info__ch_name', '', ""]
-    autocomplete_fields = ['teacher', 'info']
+    autocomplete_fields = ['teacher']  # , 'info'
     list_display = ('info', "method", "teacher")
     filter_horizontal = ['groups']
     list_filter = ['info__period', "info__semester"]

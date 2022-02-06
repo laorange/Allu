@@ -62,7 +62,7 @@ class CourseInfo(models.Model):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return f"({get_period_display(self.period)}){self.ch_name}"
+        return f"({self.period}){self.get_semester_display()} {self.ch_name}"
 
 
 class Teacher(models.Model):
@@ -96,7 +96,7 @@ class Group(models.Model):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return f"({self.get_semester_display()}) " + self.name
+        return f"({self.period}){self.get_semester_display()} " + self.name
 
 
 class CoursePlan(models.Model):
