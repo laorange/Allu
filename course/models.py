@@ -119,6 +119,7 @@ class CoursePlan(models.Model):
 class Classroom(models.Model):
     room_id = models.AutoField(primary_key=True, help_text="id")
     name = models.CharField(verbose_name="教室名", max_length=100, unique=True, help_text="教室名")
+    is_common = models.BooleanField(verbose_name="是否自习室", default=True, help_text="是否可作为自习室")
 
     class Meta:
         verbose_name = '教室'

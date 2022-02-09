@@ -137,29 +137,10 @@
         }
     </script>
     <script>
-        axios.get("/course/api/SemesterConfig/").then(
-            response => {
-                console.log("请求API", response.data);
-                if (response.data.results) {
-                    let currentPeriod = response.data.results[0]['current_period'];
-                    let infoSelect = document.getElementById("id_info");
-                    let infos = infoSelect.querySelectorAll("option");
-                    for (const info of infos) {
-                        if (info.innerText.search("(" + currentPeriod + ")") === -1) {
-                            info.style.display = "none";
-                        }
-                    }
-                }
-            },
-            error => {
-                console.warn(error.message);
-            },
-        );
-
         function filterGroupsByCourseInfo(target) {
             let info = target.options[target.selectedIndex].innerText.match(/\((\d+?)\)(\S+\s)/g);
             if (info) {
-                let period = Number.parseInt(RegExp.$1);
+                //let period = Number.parseInt(RegExp.$1);
                 let semester = RegExp.$2;
                 let groupSelect = document.getElementById("id_groups_from");
                 if (groupSelect) {
@@ -176,10 +157,33 @@
             }
         }
 
-        let infoId = document.getElementById("id_info");
-        infoId.addEventListener("change", (e) => {
-            return filterGroupsByCourseInfo(e.target);
-        });
-        filterGroupsByCourseInfo(infoId);
+        window.onload = () => {
+            let infoSelect = document.getElementById("id_info");
+            if (infoSelect) {
+                axios.get("/course/api/SemesterConfig/").then(
+                    response => {
+                        console.log("API", response.data);
+                        if (response.data.results) {
+                            let currentPeriod = response.data.results[0]['current_period'];
+
+                            let infos = infoSelect.querySelectorAll("option");
+                            for (const info of infos) {
+                                if (info.innerText.search("(" + currentPeriod + ")") === -1) {
+                                    info.style.display = "none";
+                                }
+                            }
+                        }
+                        let infoId = document.getElementById("id_info");
+                        infoId.addEventListener("change", (e) => {
+                            return filterGroupsByCourseInfo(e.target);
+                        });
+                        filterGroupsByCourseInfo(infoId);
+                    },
+                    error => {
+                        console.warn(error.message);
+                    },
+                );
+            }
+        }
     </script>
 {% endblock %}

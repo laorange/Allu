@@ -72,14 +72,12 @@ class GroupField(serializers.ModelSerializer):
 
 
 class CoursePlanSerializer(serializers.ModelSerializer):
-    groups = serializers.SerializerMethodField()
-
-    @staticmethod
-    def get_groups(obj):
-        for group in obj.groups.all():
-            print(group.name)
-
-        return "&".join([group.name for group in obj.groups.all()])
+    # @staticmethod
+    # def get_groups(obj):
+    #     for group in obj.groups.all():
+    #         print(group.name)
+    #
+    #     return "&".join([group.name for group in obj.groups.all()])
 
     class Meta:
         model = CoursePlan
@@ -90,7 +88,7 @@ class CoursePlanSerializer(serializers.ModelSerializer):
 class ClassroomSerializer(serializers.ModelSerializer):
     class Meta:
         model = Classroom
-        fields = ['room_id', 'name']
+        fields = ['room_id', 'name', "is_common"]
 
 
 class CourseChangeLogSerializer(serializers.ModelSerializer):
@@ -121,7 +119,7 @@ class CourseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Course
-        fields = ['course_id', 'plan', 'room', 'date', 'which_lesson', 'update_time', "note"]
+        fields = ['course_id', 'date', 'which_lesson', 'plan', 'room', 'update_time', "note"]
         depth = 3
 
 

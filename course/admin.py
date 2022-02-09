@@ -63,13 +63,16 @@ class CoursePlanAdmin(ImportExportModelAdmin):
     ordering = ['info', 'method']
     resource_class = CoursePlanResource
 
+    change_form_template = "admin/pdc_change_form.html"
+    add_form_template = "admin/pdc_change_form.html"
+
     # def get_form(self, *args, **kwargs):
     #     return MyCoursePlanForm
 
 
 @admin.register(Classroom)
 class ClassroomAdmin(ImportExportModelAdmin):
-    list_display = ['name']
+    list_display = ['name', "is_common"]
     ordering = ['name']
     resource_class = ClassroomResource
 
