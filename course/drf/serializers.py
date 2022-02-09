@@ -133,14 +133,14 @@ class CourseForPostSerializer(serializers.ModelSerializer):
 
 # --------- EXTRA DETAIL (2D 3D...) ---------
 class CoursePlan2dSerializer(CoursePlanSerializer):
-    plan_course = CourseSerializer(many=True, help_text="排课记录")
+    # plan_course = CourseSerializer(many=True, help_text="排课记录")
 
     class Meta(CoursePlanSerializer.Meta):
         fields = CoursePlanSerializer.Meta.fields + ["plan_course"]
 
 
 class CourseInfo2dSerializer(CourseInfoSerializer):
-    info_plan = CoursePlanSerializer(many=True, help_text="教学计划")
+    # info_plan = CoursePlanSerializer(many=True, help_text="教学计划")
 
     class Meta(CourseInfoSerializer.Meta):
         fields = CourseInfoSerializer.Meta.fields + ["info_plan"]
@@ -154,7 +154,7 @@ class CourseInfo3dSerializer(CourseInfo2dSerializer):
 
 
 class Classroom2dSerializer(ClassroomSerializer):
-    room_course = CourseSerializer(many=True, help_text="排课记录")
+    # room_course = CourseSerializer(many=True, help_text="排课记录")
 
     class Meta(ClassroomSerializer.Meta):
         fields = ClassroomSerializer.Meta.fields + ["room_course"]
