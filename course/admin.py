@@ -65,9 +65,7 @@ class CoursePlanAdmin(ImportExportModelAdmin):
 
     change_form_template = "admin/pdc_change_form.html"
     add_form_template = "admin/pdc_change_form.html"
-
-    # def get_form(self, *args, **kwargs):
-    #     return MyCoursePlanForm
+    change_list_template = "vue/pdcAdmin/index.html"
 
 
 @admin.register(Classroom)
@@ -111,6 +109,7 @@ class CourseAdmin(ImportExportModelAdmin):
 
     # add_form_template = ...
     # change_form_template = ...
+    # change_list_template =
 
     def delete_queryset(self, request, queryset):
         for query in queryset:
