@@ -137,6 +137,7 @@ class CoursePlan2dSerializer(CoursePlanSerializer):
 
     class Meta(CoursePlanSerializer.Meta):
         fields = CoursePlanSerializer.Meta.fields + ["plan_course"]
+        depth = 1
 
 
 class CourseInfo2dSerializer(CourseInfoSerializer):
@@ -144,6 +145,7 @@ class CourseInfo2dSerializer(CourseInfoSerializer):
 
     class Meta(CourseInfoSerializer.Meta):
         fields = CourseInfoSerializer.Meta.fields + ["info_plan"]
+        depth = 1
 
 
 class CourseInfo3dSerializer(CourseInfo2dSerializer):
@@ -158,6 +160,7 @@ class Classroom2dSerializer(ClassroomSerializer):
 
     class Meta(ClassroomSerializer.Meta):
         fields = ClassroomSerializer.Meta.fields + ["room_course"]
+        depth = 1
 
 
 class Group2dSerializer(GroupSerializer):

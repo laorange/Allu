@@ -58,6 +58,7 @@ class CoursePlanFilter(MyFilter):
                                                      'semester', 'ch_name', 'en_name', 'fr_name']
 
 
+# Classroom.objects.filter(room_course__date__week_day)
 class ClassroomFilter(MyFilter):
     name = django_filters.CharFilter(field_name='name', lookup_expr='icontains', help_text='检索教室名')
 
@@ -71,7 +72,7 @@ class CourseChangeLogFilter(MyFilter):
     description = django_filters.CharFilter(field_name='description', lookup_expr='icontains', help_text='检索变动描述')
 
     class Meta(CourseChangeLogSerializer.Meta):
-        fields = ['log_id', 'plan', 'action', 'description', "after", "before"]
+        fields = ['log_id', 'plan', 'action', 'description', "after", "before", "plan__info__semester", "plan__groups"]
 
 
 class CourseFilter(MyFilter):
