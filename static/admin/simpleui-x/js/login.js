@@ -18,27 +18,6 @@ var loginApp = new Vue({
                 return;
             }
             this.$nextTick(function () {
-                axios({
-                    method: 'post',
-                    url: "/dj-rest-auth/login/",
-                    data: {
-                        username: this.username,
-                        password: this.password
-                    }
-                }).then(
-                    response => {
-                        console.log("请求API", response.data);
-                        if (response.data.key) {
-                            localStorage.setItem("dj-rest-auth-token", response.data.key)
-                        } 
-                        // else {
-                        //     console.warn(response.data);
-                        // }
-                    },
-                    error => {
-                        console.warn(error.message);
-                    },
-                );
                 document.getElementById('login-form').submit();
             });
         }

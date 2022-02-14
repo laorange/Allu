@@ -103,8 +103,9 @@ class SemesterConfigAdmin(ImportExportModelAdmin):
 class CourseAdmin(ImportExportModelAdmin):
     date_hierarchy = 'date'
     list_display = ["plan", "date", 'which_lesson', "note"]
-    ordering = ["date", 'which_lesson']
-    list_filter = ["plan__info__period", "plan__info__semester", 'which_lesson']
+    ordering = ["-date", 'which_lesson']
+    search_fields = ['plan__info__ch_name']
+    list_filter = ["plan__info__period", "plan__info__semester", "plan__method", 'which_lesson']
     resource_class = CourseResource
 
     # add_form_template = ...
