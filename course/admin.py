@@ -107,6 +107,8 @@ class CourseAdmin(ImportExportModelAdmin):
     search_fields = ['plan__info__ch_name']
     list_filter = ["plan__info__period", "plan__info__semester", "plan__method", 'which_lesson']
     resource_class = CourseResource
+    fields = ['plan', 'room', 'date', 'which_lesson', 'note']
+    readonly_fields = ['update_time']
 
     # add_form_template = ...
     # change_form_template = ...

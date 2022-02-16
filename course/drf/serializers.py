@@ -82,7 +82,6 @@ class CoursePlanSerializer(serializers.ModelSerializer):
     class Meta:
         model = CoursePlan
         fields = ['plan_id', 'teacher', 'info', 'groups', 'method']
-        depth = 1
 
 
 class ClassroomSerializer(serializers.ModelSerializer):
@@ -92,13 +91,11 @@ class ClassroomSerializer(serializers.ModelSerializer):
 
 
 class CourseChangeLogSerializer(serializers.ModelSerializer):
-    update_time = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S')
-    plan = CoursePlanSerializer()
+    # update_time = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S')
 
     class Meta:
         model = CourseChangeLog
         fields = ['log_id', 'plan', 'action', 'description', 'update_time']
-        depth = 2
 
 
 class SemesterConfigSerializer(serializers.ModelSerializer):
@@ -115,17 +112,16 @@ class SemesterConfigSerializer(serializers.ModelSerializer):
 
 
 class CourseSerializer(serializers.ModelSerializer):
-    update_time = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S')
+    # update_time = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S')
 
     class Meta:
         model = Course
-        fields = ['course_id', 'date', 'which_lesson', 'plan', 'room', 'update_time', "note"]
-        depth = 3
+        fields = ['course_id', 'plan', 'room', 'date', 'which_lesson', 'note', 'update_time',
+                  'color', 'period', 'semester', 'code', 'ch_name', 'en_name', 'fr_name',
+                  'method', 'group_ids', 'teacher_name', 'room_name']
 
 
 class CourseForPostSerializer(serializers.ModelSerializer):
-    update_time = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S', default=datetime_now)
-
     class Meta:
         model = Course
         fields = ['plan', 'room', 'date', 'which_lesson', 'update_time', "note"]
@@ -168,6 +164,13 @@ class Group2dSerializer(GroupSerializer):
 
     class Meta(GroupSerializer.Meta):
         fields = GroupSerializer.Meta.fields + ["group_plan"]
+
+
+class Course2dSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Course
+        fields = ['course_id', 'date', 'which_lesson', 'plan', 'room', 'update_time', "note"]
+        depth = 3
 
 
 # region - Finally here is the serializers_dict

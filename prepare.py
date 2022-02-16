@@ -315,3 +315,6 @@ if __name__ == '__main__':
     prepare_type()
     prepare_lesson_info()
     prepare_semester_config()
+
+    # for course in Course.objects.all():
+    #     course.save()
