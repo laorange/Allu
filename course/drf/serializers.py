@@ -129,6 +129,12 @@ class CourseForPostSerializer(serializers.ModelSerializer):
         fields = ['plan', 'room', 'date', 'which_lesson', 'update_time', "note"]
 
 
+class NoticeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notice
+        fields = ['notice_id', 'content', 'link', 'validity', 'update_time']
+
+
 # --------- EXTRA DETAIL (2D 3D...) ---------
 class CoursePlan2dSerializer(CoursePlanSerializer):
     # plan_course = CourseSerializer(many=True, help_text="排课记录")

@@ -113,6 +113,11 @@ class CourseFilter(MyFilter):
         # 'fr_name', 'teacher_id', 'teacher_name', 'method']
 
 
+class NoticeFilter(MyFilter):
+    class Meta(NoticeSerializer.Meta):
+        pass
+
+
 # --------- EXTRA DETAIL (2D 3D...) ---------
 class CoursePlan2dFilter(CoursePlanFilter):
     class Meta(CoursePlanFilter.Meta):

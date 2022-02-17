@@ -119,3 +119,8 @@ class CourseAdmin(ImportExportModelAdmin):
     def delete_queryset(self, request, queryset):
         for query in queryset:
             query.delete()
+
+
+@admin.register(Notice)
+class NoticeAdmin(admin.ModelAdmin):
+    list_display = ['content', 'validity', 'update_time']
