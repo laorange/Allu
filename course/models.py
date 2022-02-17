@@ -231,15 +231,15 @@ class Course(models.Model):
     def save(self, *args, **kwargs):
         if old := Course.objects.filter(course_id=self.course_id):
             old = old[0]
+            description = ""
             if self.plan_id != old.plan_id:
                 description = f"变更：{self.date}{self.get_which_lesson_display()}的{old.plan}变更为{self.plan}"
             elif (self.date != old.date or self.which_lesson != old.which_lesson) and self.plan_id == old.plan_id:
                 description = f"调课：原{old.date}{old.get_which_lesson_display()}的{self.plan}，调到{self.date}{self.get_which_lesson_display()}"
             elif self.room_id != old.room_id and self.plan_id == old.plan_id:
                 description = f"换教室：{self.date}{self.get_which_lesson_display()}的{self.plan}，从{old.room}换到{self.room}"
-            else:
-                description = f"变更：{old.date}{old.get_which_lesson_display()}_{old.plan} → {self.date}{self.get_which_lesson_display()}_{self.plan}"
-            CourseChangeLog.objects.create(plan_id=old.plan_id, action="Update", description=description)
+            if description:
+                CourseChangeLog.objects.create(plan_id=old.plan_id, action="Update", description=description)
         else:
             description = f"新增：{self.date}{self.get_which_lesson_display()}的{self.plan}"
             CourseChangeLog.objects.create(plan_id=self.plan_id, action="Create", description=description)
