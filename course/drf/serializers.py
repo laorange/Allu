@@ -95,7 +95,9 @@ class CourseChangeLogSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CourseChangeLog
-        fields = ['log_id', 'plan', 'action', 'description', 'update_time']
+        fields = ['log_id', 'plan', 'action', 'description', 'update_time',
+                  'color', 'period', 'semester', 'code', 'ch_name', 'en_name', 'fr_name',
+                  'method', 'group_ids', 'teacher_name']
 
 
 class SemesterConfigSerializer(serializers.ModelSerializer):

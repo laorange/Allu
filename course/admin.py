@@ -80,6 +80,8 @@ class CourseChangeLogAdmin(ImportExportModelAdmin):
     date_hierarchy = 'update_time'
     list_display = ["update_time", "plan", "update_time", "description"]
     ordering = ["-update_time"]
+    fields = ['plan', 'action', 'description']
+    readonly_fields = ["update_time"]
     resource_class = CourseChangeLogResource
 
 

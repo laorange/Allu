@@ -137,12 +137,42 @@ class CourseChangeLog(models.Model):
     description = models.CharField(verbose_name="描述", max_length=255, help_text="对本次变动的描述", blank=True, null=True)
     update_time = models.DateTimeField(verbose_name="更新时间", auto_now_add=True, help_text='该变动发生的时间')
 
+    # region 别的表储存在此处的信息
+    color = models.CharField(verbose_name="颜色", max_length=6, help_text="颜色，六位字符，例如：FFFFFF", blank=True, null=True)
+
+    period = models.IntegerField(verbose_name="时期", help_text="从2007.9算起的第?学期", blank=True, null=True)
+    semester = models.IntegerField(verbose_name="学期", choices=semester_choice, blank=True, null=True,
+                                   help_text="从大一上算起的第?学期 ∈ [1,14]")
+    code = models.CharField(max_length=100, default='', help_text='课程编号(如CS21,ES22)', blank=True, null=True)
+    ch_name = models.CharField(verbose_name="中文名", max_length=100, help_text="课程中文名", blank=True, null=True)
+    en_name = models.CharField(verbose_name="English", max_length=100, help_text="课程英语名", blank=True, null=True)
+    fr_name = models.CharField(verbose_name="Français", max_length=100, help_text="课程法语名", blank=True, null=True)
+
+    method = models.CharField(verbose_name="授课方式", max_length=8, choices=method_choice, help_text="Course/TD/TP/DS", default="Course")
+    group_ids = models.CharField(verbose_name="分组", max_length=100, help_text="group_id(s),以字符串储存列表", blank=True, null=True)
+    teacher_name = models.CharField(verbose_name="教师名", max_length=200, help_text="授课教师姓名", blank=True, null=True)
+
+    # endregion
+
     class Meta:
         verbose_name = '课程更新日志'
         verbose_name_plural = verbose_name
 
     def __str__(self):
         return self.action + "：" + self.plan.__str__()
+
+    def save(self, *args, **kwargs):
+        self.color = self.plan.info.type.color
+        self.period = self.plan.info.period
+        self.semester = self.plan.info.semester
+        self.code = self.plan.info.code
+        self.ch_name = self.plan.info.ch_name
+        self.en_name = self.plan.info.en_name
+        self.fr_name = self.plan.info.fr_name
+        self.method = self.plan.method
+        self.group_ids = str([group.group_id for group in self.plan.groups.all()])
+        self.teacher_name = self.plan.teacher.name
+        super(CourseChangeLog, self).save(*args, **kwargs)
 
 
 class SemesterConfig(models.Model):
@@ -179,8 +209,8 @@ class Course(models.Model):
     fr_name = models.CharField(verbose_name="Français", max_length=100, help_text="课程法语名", blank=True, null=True)
 
     method = models.CharField(verbose_name="授课方式", max_length=8, choices=method_choice, help_text="Course/TD/TP/DS", default="Course")
-    group_ids = models.CharField(verbose_name="姓名", max_length=100, help_text="group_id(s),以字符串储存列表", blank=True, null=True)
-    teacher_name = models.CharField(verbose_name="姓名", max_length=100, help_text="授课教师姓名", blank=True, null=True)
+    group_ids = models.CharField(verbose_name="分组", max_length=100, help_text="group_id(s),以字符串储存列表", blank=True, null=True)
+    teacher_name = models.CharField(verbose_name="教师名", max_length=200, help_text="授课教师姓名", blank=True, null=True)
 
     room_name = models.CharField(verbose_name="教室名", max_length=100, help_text="教室名", blank=True, null=True)
 
