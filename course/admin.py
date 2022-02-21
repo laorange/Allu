@@ -123,4 +123,5 @@ class CourseAdmin(ImportExportModelAdmin):
 
 @admin.register(Notice)
 class NoticeAdmin(admin.ModelAdmin):
-    list_display = ['content', 'validity', 'update_time']
+    list_display = ['content', 'priority', 'validity', 'update_time']
+    ordering = ['-priority']

@@ -132,7 +132,7 @@ class CourseForPostSerializer(serializers.ModelSerializer):
 class NoticeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notice
-        fields = ['notice_id', 'content', 'link', 'validity', 'update_time']
+        fields = ['notice_id', 'content', 'link', "priority", 'validity', 'update_time']
 
 
 # --------- EXTRA DETAIL (2D 3D...) ---------

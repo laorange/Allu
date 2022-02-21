@@ -263,6 +263,7 @@ class Notice(models.Model):
     notice_id = models.AutoField(primary_key=True, help_text="id")
     content = models.CharField(verbose_name="描述", max_length=255, help_text="对本次变动的描述")
     link = models.TextField(verbose_name="链接", help_text="点击通知时跳转链接", blank=True, null=True)
+    priority = models.IntegerField(verbose_name="优先级", help_text="数字越大优先级越高", default=1)
     validity = models.BooleanField(verbose_name="是否生效", default=True, help_text="是否生效")
     update_time = models.DateTimeField(verbose_name="更新时间", auto_now=True, help_text='这条记录的更新时间')
 

@@ -1,7 +1,7 @@
-import datetime
+# import datetime
 from typing import List
 
-from course.models import *
+# from course.models import *
 from django.shortcuts import render
 
 
@@ -18,28 +18,15 @@ def index_view(request):
 
     funcs: List[IndexFunction] = []
 
-    semester_config = SemesterConfig.objects.get(config_id=1)
-    # semester_config.current_period
-    period_b = 1 - (semester_config.current_period % 2)
-    # week = (semester_config.week1_monday_date - datetime.now()).min // 10080 + 1
-    now = datetime.datetime.now()
-    weekday = now.isoweekday()
-    after = (datetime.datetime.now() - datetime.timedelta(days=weekday - 1)).strftime("%Y-%m-%d")
-    before = (datetime.datetime.now() + datetime.timedelta(days=7 - weekday)).strftime("%Y-%m-%d")
-
     funcs += [
-        IndexFunction(f"/course/api/Course/?format=json&semester={semester + period_b}&after={after}&before={before}",
-                      f"/static/index/timetable{_index + 1}.svg",
-                      semester_choice[semester + period_b - 1][1]) for _index, semester in enumerate(range(1, 12, 2))
-    ]
-
-    funcs += [
-        IndexFunction("/", "/static/index/freeClassroom.svg", "空闲教室"),
-        IndexFunction("/", "/static/index/PDC.svg", "教学计划"),
-        IndexFunction("/", "/static/index/exam.svg", "考试安排"),
+        IndexFunction("http://new.siae.top/", "/static/index/timetable1.svg", "课表"),
+        IndexFunction("http://new.siae.top/#/classroom", "/static/index/freeClassroom.svg", "空闲教室"),
+        IndexFunction("http://new.siae.top/#/exam", "/static/index/exam.svg", "考试安排"),
+        IndexFunction("http://new.siae.top/#/news", "/static/index/query.svg", "更新日志"),
         IndexFunction("/admin/", "/static/index/admin.svg", "信息管理"),
-        IndexFunction("/course/api/", "/static/index/API.svg", "API"),
-        IndexFunction("/help/", "/static/index/info.svg", "使用帮助"),
+        IndexFunction("https://siae.top/admin/#/admin/course/courseplan/", "/static/index/PDC.svg", "教学计划"),
+        # IndexFunction("/course/api/", "/static/index/API.svg", "API"),
+        # IndexFunction("/help/", "/static/index/info.svg", "使用帮助"),
     ]
 
     return render(request, "index/index.html", {"functions": [f.__dict__ for f in funcs]})
