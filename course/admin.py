@@ -1,4 +1,7 @@
 from django.contrib import admin
+from rest_framework.authtoken.models import TokenProxy
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.contrib.auth import get_user_model
 from import_export.admin import ImportExportModelAdmin
 
 from .resource import *
@@ -6,6 +9,18 @@ from .resource import *
 # 修改网页title和站点header
 admin.site.site_title = "中欧航空工程师学院-课程管理系统"
 admin.site.site_header = "SIAE-课程管理系统"
+
+User = get_user_model()
+admin.site.unregister(User)
+
+admin.site.unregister(TokenProxy)
+
+
+@admin.register(User)
+class UserAdmin(BaseUserAdmin):
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs if request.user.pk == 1 else qs.exclude(pk=1)
 
 
 # Register your models here.
@@ -43,14 +58,6 @@ class GroupAdmin(ImportExportModelAdmin):
     list_filter = ['period', "semester"]
     filter_horizontal = ['group_plan']
     resource_class = GroupResource
-
-
-# class MyCoursePlanForm(forms.ModelForm):
-#     info = forms.ModelChoiceField(CourseInfo.objects.filter(period=SemesterConfig.objects.first().current_period))
-#
-#     class Meta:
-#         model = CoursePlan
-#         fields = '__all__'
 
 
 @admin.register(CoursePlan)

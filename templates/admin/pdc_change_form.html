@@ -140,14 +140,14 @@
         function filterGroupsByCourseInfo(target) {
             let info = target.options[target.selectedIndex].innerText.match(/\((\d+?)\)(\S+\s)/g);
             if (info) {
-                //let period = Number.parseInt(RegExp.$1);
+                let period = Number.parseInt(RegExp.$1);
                 let semester = RegExp.$2;
                 let groupSelect = document.getElementById("id_groups_from");
                 if (groupSelect) {
                     let groups = groupSelect.querySelectorAll("option");
                     for (const group of groups) {
                         let title = group.getAttribute('title');
-                        if (title.search(semester) === -1) {
+                        if (title.search(semester) === -1 || title.search(`(${period})`) === -1) {
                             group.style.display = "none";
                         } else {
                             group.style.display = "";
