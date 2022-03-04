@@ -30,7 +30,8 @@ class DrfContainer:
         parent_class = viewsets.ModelViewSet if "forpost" in self.name.lower() else viewsets.ReadOnlyModelViewSet
 
         kwarg = dict(filter_backends=[DjangoFilterBackend],
-                     authentication_classes=(TokenAuthentication, CsrfExemptSessionAuthentication, BasicAuthentication),
+                     authentication_classes=(CsrfExemptSessionAuthentication, BasicAuthentication),
+                     # authentication_classes=(TokenAuthentication, CsrfExemptSessionAuthentication, BasicAuthentication),
                      queryset=self.model.objects.all(),
                      serializer_class=self.serializer) | ({"filter_class": self.filter} if self.filter else {})
 
