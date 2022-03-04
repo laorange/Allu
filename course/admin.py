@@ -44,6 +44,7 @@ class TeacherAdmin(ImportExportModelAdmin):
     search_fields = ['name', 'slug']
     list_display = ['name', 'slug']
     ordering = ['slug']
+    readonly_fields = ['slug']
     resource_class = TeacherResource
 
     def has_delete_permission(self, *args):
