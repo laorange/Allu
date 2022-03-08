@@ -44,6 +44,11 @@ class CourseType(models.Model):
     def __str__(self):
         return self.name
 
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        super(CourseType, self).save(force_insert, force_update, using, update_fields)
+        for info in self.type_info.all():
+            info.save()
+
 
 class CourseInfo(models.Model):
     info_id = models.AutoField(primary_key=True, help_text="id")
@@ -57,12 +62,22 @@ class CourseInfo(models.Model):
     en_name = models.CharField(verbose_name="English", max_length=100, help_text="课程英语名", blank=True, null=True)
     fr_name = models.CharField(verbose_name="Français", max_length=100, help_text="课程法语名", blank=True, null=True)
 
+    # CourseType 存在这儿的
+    color = models.CharField(verbose_name="颜色", max_length=6, help_text="颜色，六位字符，例如：FFFFFF", blank=True, null=True)
+
     class Meta:
         verbose_name = '课程信息'
         verbose_name_plural = verbose_name
 
     def __str__(self):
         return f"({self.period}){self.get_semester_display()} {self.ch_name}"
+
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        self.color = self.type.color
+
+        super(CourseInfo, self).save(force_insert, force_update, using, update_fields)
+        for plan in self.info_plan.all():
+            plan.save()
 
 
 class Teacher(models.Model):
@@ -75,13 +90,13 @@ class Teacher(models.Model):
         verbose_name = '授课教师'
         verbose_name_plural = verbose_name
 
+    def __str__(self):
+        return self.name + f" ({self.slug})"
+
     def save(self, **kwargs):
         slug = slugify(self.name)
         self.slug = slug if slug else f"teacher{self.teacher_id}"
         super(Teacher, self).save(**kwargs)
-
-    def __str__(self):
-        return self.name + f" ({self.slug})"
 
 
 class Group(models.Model):
@@ -98,6 +113,11 @@ class Group(models.Model):
     def __str__(self):
         return f"({self.period}){self.get_semester_display()} " + self.name
 
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        super(Group, self).save(force_insert, force_update, using, update_fields)
+        for plan in self.group_plan.all():
+            plan.save()
+
 
 class CoursePlan(models.Model):
     plan_id = models.AutoField(primary_key=True, help_text="id")
@@ -108,6 +128,9 @@ class CoursePlan(models.Model):
     teacher = models.ForeignKey(verbose_name="授课教师", to="Teacher", on_delete=models.CASCADE,
                                 related_name="teacher_plan", help_text="FK-Teacher", blank=True, null=True)
 
+    # Teacher表 存这儿的
+    teacher_name = models.CharField(verbose_name="授课教师姓名", max_length=100, help_text="授课教师姓名", blank=True, null=True)
+
     class Meta:
         verbose_name = '教学计划'
         verbose_name_plural = verbose_name
@@ -117,6 +140,13 @@ class CoursePlan(models.Model):
         if self.teacher:
             info_ls.append(self.teacher.name)
         return "-".join(info_ls)
+
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        self.teacher_name = self.teacher.name if self.teacher else None
+        super(CoursePlan, self).save(force_insert, force_update, using, update_fields)
+        for course in self.plan_course.all():
+            course.save()
 
 
 class Classroom(models.Model):
@@ -131,14 +161,16 @@ class Classroom(models.Model):
     def __str__(self):
         return self.name
 
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        super(Classroom, self).save(force_insert, force_update, using, update_fields)
+        for course in self.room_course.all():
+            course.save()
 
-class CourseChangeLog(models.Model):
-    log_id = models.AutoField(primary_key=True, help_text="id")
+
+class CoursePlanChildModel(models.Model):
     plan = models.ForeignKey(verbose_name="教学计划", to="CoursePlan", on_delete=models.CASCADE,
-                             related_name="plan_log", help_text="FK-CoursePlan")
-    action = models.CharField(verbose_name="动作", max_length=8, choices=action_choice, help_text="新增/更新/删除")
-    description = models.CharField(verbose_name="描述", max_length=255, help_text="对本次变动的描述", blank=True, null=True)
-    update_time = models.DateTimeField(verbose_name="更新时间", auto_now_add=True, help_text='该变动发生的时间')
+                             related_name="toBeOverwritten", help_text="FK-toBeOverwritten")
 
     # region 别的表储存在此处的信息
     color = models.CharField(verbose_name="颜色", max_length=6, help_text="颜色，六位字符，例如：FFFFFF", blank=True, null=True)
@@ -157,14 +189,7 @@ class CourseChangeLog(models.Model):
 
     # endregion
 
-    class Meta:
-        verbose_name = '课程更新日志'
-        verbose_name_plural = verbose_name
-
-    def __str__(self):
-        return self.action + "：" + self.plan.__str__()
-
-    def save(self, *args, **kwargs):
+    def activate_trigger_of_save(self):
         self.color = self.plan.info.type.color
         self.period = self.plan.info.period
         self.semester = self.plan.info.semester
@@ -175,21 +200,32 @@ class CourseChangeLog(models.Model):
         self.method = self.plan.method
         self.group_ids = str([group.group_id for group in self.plan.groups.all()])
         self.teacher_name = self.plan.teacher.name if self.plan.teacher else None
+
+    class Meta:
+        abstract = True
+
+
+class CourseChangeLog(CoursePlanChildModel):
+    log_id = models.AutoField(primary_key=True, help_text="id")
+    plan = models.ForeignKey(verbose_name="教学计划", to="CoursePlan", on_delete=models.CASCADE,
+                             related_name="plan_log", help_text="FK-CoursePlan")
+    action = models.CharField(verbose_name="动作", max_length=8, choices=action_choice, help_text="新增/更新/删除")
+    description = models.CharField(verbose_name="描述", max_length=255, help_text="对本次变动的描述", blank=True, null=True)
+    update_time = models.DateTimeField(verbose_name="更新时间", auto_now_add=True, help_text='该变动发生的时间')
+
+    class Meta:
+        verbose_name = '课程更新日志'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.action + "：" + self.plan.__str__()
+
+    def save(self, *args, **kwargs):
+        self.activate_trigger_of_save()
         super(CourseChangeLog, self).save(*args, **kwargs)
 
 
-class SemesterConfig(models.Model):
-    config_id = models.AutoField(primary_key=True, help_text="id")
-    current_period = models.IntegerField(verbose_name="当前时期", help_text="从2007.9算起的第?学期")
-    week1_monday_date = models.DateTimeField(verbose_name="学期开始日期", help_text="本学期第一周星期一的日期")
-    max_week = models.IntegerField(verbose_name="最大周数", default=20, help_text="本学期共计多少周")
-
-    class Meta:
-        verbose_name = '学期信息配置'
-        verbose_name_plural = verbose_name
-
-
-class Course(models.Model):
+class Course(CoursePlanChildModel):
     course_id = models.AutoField(primary_key=True, help_text="id")
     plan = models.ForeignKey(verbose_name="教学计划", to="CoursePlan", on_delete=models.CASCADE,
                              related_name="plan_course", help_text="FK-CoursePlan")
@@ -200,21 +236,7 @@ class Course(models.Model):
     note = models.CharField(verbose_name="备注", max_length=255, blank=True, null=True, default=None, help_text="补充说明")
     update_time = models.DateTimeField(verbose_name="更新时间", auto_now=True, help_text='这条记录的更新时间')
 
-    # region 别的表储存在此处的信息
-    color = models.CharField(verbose_name="颜色", max_length=6, help_text="颜色，六位字符，例如：FFFFFF", blank=True, null=True)
-
-    period = models.IntegerField(verbose_name="时期", help_text="从2007.9算起的第?学期", blank=True, null=True)
-    semester = models.IntegerField(verbose_name="学期", choices=semester_choice, blank=True, null=True,
-                                   help_text="从大一上算起的第?学期 ∈ [1,14]")
-    code = models.CharField(max_length=100, default='', help_text='课程编号(如CS21,ES22)', blank=True, null=True)
-    ch_name = models.CharField(verbose_name="中文名", max_length=100, help_text="课程中文名", blank=True, null=True)
-    en_name = models.CharField(verbose_name="English", max_length=100, help_text="课程英语名", blank=True, null=True)
-    fr_name = models.CharField(verbose_name="Français", max_length=100, help_text="课程法语名", blank=True, null=True)
-
-    method = models.CharField(verbose_name="授课方式", max_length=8, choices=method_choice, help_text="Course/TD/TP/Exam", default="Course")
-    group_ids = models.CharField(verbose_name="分组", max_length=100, help_text="group_id(s),以字符串储存列表", blank=True, null=True)
-    teacher_name = models.CharField(verbose_name="教师名", max_length=200, help_text="授课教师姓名", blank=True, null=True)
-
+    # 别的表储存在此处的信息
     room_name = models.CharField(verbose_name="教室名", max_length=100, help_text="教室名", blank=True, null=True)
 
     # endregion
@@ -247,19 +269,21 @@ class Course(models.Model):
             description = f"新增：{self.date}{self.get_which_lesson_display()}的{self.plan}"
             CourseChangeLog.objects.create(plan_id=self.plan_id, action="Create", description=description)
 
-        self.color = self.plan.info.type.color
-        self.period = self.plan.info.period
-        self.semester = self.plan.info.semester
-        self.code = self.plan.info.code
-        self.ch_name = self.plan.info.ch_name
-        self.en_name = self.plan.info.en_name
-        self.fr_name = self.plan.info.fr_name
-        self.method = self.plan.method
-        self.group_ids = str([group.group_id for group in self.plan.groups.all()])
-        self.teacher_name = self.plan.teacher.name if self.plan.teacher else None
+        self.activate_trigger_of_save()
         self.room_name = self.room.name if self.room else None
 
         return super(Course, self).save(*args, **kwargs)
+
+
+class SemesterConfig(models.Model):
+    config_id = models.AutoField(primary_key=True, help_text="id")
+    current_period = models.IntegerField(verbose_name="当前时期", help_text="从2007.9算起的第?学期")
+    week1_monday_date = models.DateTimeField(verbose_name="学期开始日期", help_text="本学期第一周星期一的日期")
+    max_week = models.IntegerField(verbose_name="最大周数", default=20, help_text="本学期共计多少周")
+
+    class Meta:
+        verbose_name = '学期信息配置'
+        verbose_name_plural = verbose_name
 
 
 class Notice(models.Model):

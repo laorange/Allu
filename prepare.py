@@ -312,15 +312,18 @@ def prepare_semester_config():
 
 
 if __name__ == '__main__':
-    prepare_teacher()
-    prepare_classroom()
-    prepare_group()
-    prepare_type()
-    prepare_lesson_info()
-    prepare_semester_config()
+    # prepare_teacher()
+    # prepare_classroom()
+    # prepare_group()
+    # prepare_type()
+    # prepare_lesson_info()
+    # prepare_semester_config()
 
     # for course in Course.objects.all():
     #     course.save()
 
     # for log in tqdm(CourseChangeLog.objects.all()):
     #     log.save()
+
+    for t in tqdm(CourseType.objects.all()):
+        t.save()

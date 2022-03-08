@@ -47,7 +47,7 @@ class CourseTypeSerializer(serializers.ModelSerializer):
 class CourseInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = CourseInfo
-        fields = ['info_id', 'type', 'period', 'semester', 'code', 'ch_name', 'en_name', 'fr_name']
+        fields = ['info_id', 'type', 'period', 'semester', 'code', 'ch_name', 'en_name', 'fr_name', 'color']
 
 
 class TeacherSerializer(serializers.ModelSerializer):
@@ -81,7 +81,7 @@ class CoursePlanSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CoursePlan
-        fields = ['plan_id', 'teacher', 'info', 'groups', 'method']
+        fields = ['plan_id', 'teacher', 'info', 'groups', 'method', 'teacher_name']
 
 
 class ClassroomSerializer(serializers.ModelSerializer):

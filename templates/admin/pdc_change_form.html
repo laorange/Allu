@@ -174,8 +174,8 @@
                             }
                         }
                         let infoId = document.getElementById("id_info");
-                        infoId.addEventListener("change", (e) => {
-                            return filterGroupsByCourseInfo(e.target);
+                        document.addEventListener("change", () => {
+                            return filterGroupsByCourseInfo(infoId);
                         });
                         filterGroupsByCourseInfo(infoId);
                     },

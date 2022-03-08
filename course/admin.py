@@ -36,6 +36,7 @@ class CourseInfoAdmin(ImportExportModelAdmin):
     list_display = ('period', "semester", 'type', 'ch_name', 'en_name', "fr_name")
     list_filter = ['period', "semester", 'type']
     ordering = ['-period', "semester", 'type']
+    readonly_fields = ['color']
     resource_class = CourseInfoResource
 
 
@@ -69,10 +70,11 @@ class CoursePlanAdmin(ImportExportModelAdmin):
     filter_horizontal = ['groups']
     list_filter = ['info__period', "info__semester"]
     ordering = ['info', 'method']
+    readonly_fields = ['teacher_name']
     resource_class = CoursePlanResource
 
-    # change_form_template = "admin/pdc_change_form.html"
-    # add_form_template = "admin/pdc_change_form.html"
+    change_form_template = "admin/pdc_change_form.html"
+    add_form_template = "admin/pdc_change_form.html"
     # change_list_template = "vue/pdcAdmin/index.html"
 
 
