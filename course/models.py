@@ -113,7 +113,10 @@ class CoursePlan(models.Model):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return "_".join([self.info.ch_name, self.get_method_display(), self.teacher.name])
+        info_ls = [self.info.ch_name, self.get_method_display()]
+        if self.teacher:
+            info_ls.append(self.teacher.name)
+        return "-".join(info_ls)
 
 
 class Classroom(models.Model):

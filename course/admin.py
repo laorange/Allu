@@ -71,9 +71,9 @@ class CoursePlanAdmin(ImportExportModelAdmin):
     ordering = ['info', 'method']
     resource_class = CoursePlanResource
 
-    change_form_template = "admin/pdc_change_form.html"
-    add_form_template = "admin/pdc_change_form.html"
-    change_list_template = "vue/pdcAdmin/index.html"
+    # change_form_template = "admin/pdc_change_form.html"
+    # add_form_template = "admin/pdc_change_form.html"
+    # change_list_template = "vue/pdcAdmin/index.html"
 
 
 @admin.register(Classroom)
