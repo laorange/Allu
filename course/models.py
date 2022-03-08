@@ -9,7 +9,7 @@ semester_choice = [(1, '大一上'), (2, '大一下'), (3, '大二上'),
 method_choice = [("Course", "理论课"),
                  ("TD", "习题课"),
                  ("TP", "实验课"),
-                 ("DS", "考试")]
+                 ("Exam", "考试")]
 
 which_lesson_choice = [(1, "第1,2节课"),
                        (2, "第3,4节课"),
@@ -103,10 +103,10 @@ class CoursePlan(models.Model):
     plan_id = models.AutoField(primary_key=True, help_text="id")
     info = models.ForeignKey(verbose_name="课程信息", to="CourseInfo", on_delete=models.CASCADE,
                              related_name="info_plan", help_text="FK-CourseInfo")
-    method = models.CharField(verbose_name="授课方式", max_length=8, choices=method_choice, help_text="Course/TD/TP/DS")
+    method = models.CharField(verbose_name="授课方式", max_length=8, choices=method_choice, help_text="Course/TD/TP/Exam")
     groups = models.ManyToManyField(verbose_name="分组", to="Group", related_name="group_plan", help_text="M2M Plan&Group")
     teacher = models.ForeignKey(verbose_name="授课教师", to="Teacher", on_delete=models.CASCADE,
-                                related_name="teacher_plan", help_text="FK-Teacher")
+                                related_name="teacher_plan", help_text="FK-Teacher", blank=True, null=True)
 
     class Meta:
         verbose_name = '教学计划'
@@ -148,7 +148,7 @@ class CourseChangeLog(models.Model):
     en_name = models.CharField(verbose_name="English", max_length=100, help_text="课程英语名", blank=True, null=True)
     fr_name = models.CharField(verbose_name="Français", max_length=100, help_text="课程法语名", blank=True, null=True)
 
-    method = models.CharField(verbose_name="授课方式", max_length=8, choices=method_choice, help_text="Course/TD/TP/DS", default="Course")
+    method = models.CharField(verbose_name="授课方式", max_length=8, choices=method_choice, help_text="Course/TD/TP/Exam", default="Course")
     group_ids = models.CharField(verbose_name="分组", max_length=100, help_text="group_id(s),以字符串储存列表", blank=True, null=True)
     teacher_name = models.CharField(verbose_name="教师名", max_length=200, help_text="授课教师姓名", blank=True, null=True)
 
@@ -171,7 +171,7 @@ class CourseChangeLog(models.Model):
         self.fr_name = self.plan.info.fr_name
         self.method = self.plan.method
         self.group_ids = str([group.group_id for group in self.plan.groups.all()])
-        self.teacher_name = self.plan.teacher.name
+        self.teacher_name = self.plan.teacher.name if self.plan.teacher else None
         super(CourseChangeLog, self).save(*args, **kwargs)
 
 
@@ -191,7 +191,7 @@ class Course(models.Model):
     plan = models.ForeignKey(verbose_name="教学计划", to="CoursePlan", on_delete=models.CASCADE,
                              related_name="plan_course", help_text="FK-CoursePlan")
     room = models.ForeignKey(verbose_name="教室", to="Classroom", on_delete=models.CASCADE,
-                             related_name="room_course", help_text="FK-Classroom")
+                             related_name="room_course", help_text="FK-Classroom", blank=True, null=True)
     date = models.DateField(verbose_name="这节课的上课日期", help_text="这节课的上课日期")
     which_lesson = models.IntegerField(verbose_name="第?节课", choices=which_lesson_choice, help_text="第?节课，∈[1,5]")
     note = models.CharField(verbose_name="备注", max_length=255, blank=True, null=True, default=None, help_text="补充说明")
@@ -208,7 +208,7 @@ class Course(models.Model):
     en_name = models.CharField(verbose_name="English", max_length=100, help_text="课程英语名", blank=True, null=True)
     fr_name = models.CharField(verbose_name="Français", max_length=100, help_text="课程法语名", blank=True, null=True)
 
-    method = models.CharField(verbose_name="授课方式", max_length=8, choices=method_choice, help_text="Course/TD/TP/DS", default="Course")
+    method = models.CharField(verbose_name="授课方式", max_length=8, choices=method_choice, help_text="Course/TD/TP/Exam", default="Course")
     group_ids = models.CharField(verbose_name="分组", max_length=100, help_text="group_id(s),以字符串储存列表", blank=True, null=True)
     teacher_name = models.CharField(verbose_name="教师名", max_length=200, help_text="授课教师姓名", blank=True, null=True)
 
@@ -253,8 +253,8 @@ class Course(models.Model):
         self.fr_name = self.plan.info.fr_name
         self.method = self.plan.method
         self.group_ids = str([group.group_id for group in self.plan.groups.all()])
-        self.teacher_name = self.plan.teacher.name
-        self.room_name = self.room.name
+        self.teacher_name = self.plan.teacher.name if self.plan.teacher else None
+        self.room_name = self.room.name if self.room else None
 
         return super(Course, self).save(*args, **kwargs)
 

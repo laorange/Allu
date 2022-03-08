@@ -94,7 +94,7 @@ class CourseFilter(MyFilter):
     #
     # teacher_id = django_filters.NumberFilter(field_name='plan__teacher_id', help_text='检索老师id')
     # teacher_name = django_filters.CharFilter(field_name='plan__teacher__name', lookup_expr='icontains', help_text='检索老师姓名')
-    # method = django_filters.CharFilter(field_name='plan__method', help_text='检索授课方式：Course/TD/TP/DS')
+    # method = django_filters.CharFilter(field_name='plan__method', help_text='检索授课方式：Course/TD/TP/Exam')
 
     # group = django_filters.NumberFilter(field_name='plan__groups__group_id', help_text='包含分组')
 
@@ -157,7 +157,7 @@ class Course2dFilter(CourseFilter):
 
     teacher_id = django_filters.NumberFilter(field_name='plan__teacher_id', help_text='检索老师id')
     teacher_name = django_filters.CharFilter(field_name='plan__teacher__name', lookup_expr='icontains', help_text='检索老师姓名')
-    method = django_filters.CharFilter(field_name='plan__method', help_text='检索授课方式：Course/TD/TP/DS')
+    method = django_filters.CharFilter(field_name='plan__method', help_text='检索授课方式：Course/TD/TP/Exam')
 
     group = django_filters.NumberFilter(field_name='plan__groups__group_id', help_text='包含分组')
 

@@ -48,7 +48,6 @@ class CourseInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = CourseInfo
         fields = ['info_id', 'type', 'period', 'semester', 'code', 'ch_name', 'en_name', 'fr_name']
-        depth = 1
 
 
 class TeacherSerializer(serializers.ModelSerializer):
