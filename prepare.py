@@ -325,5 +325,5 @@ if __name__ == '__main__':
     # for log in tqdm(CourseChangeLog.objects.all()):
     #     log.save()
 
-    for t in tqdm(CourseType.objects.all()):
+    for t in tqdm(CoursePlan.objects.all()):
         t.save()

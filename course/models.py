@@ -131,6 +131,16 @@ class CoursePlan(models.Model):
     # Teacher表 存这儿的
     teacher_name = models.CharField(verbose_name="授课教师姓名", max_length=100, help_text="授课教师姓名", blank=True, null=True)
 
+    color = models.CharField(verbose_name="颜色", max_length=6, help_text="颜色，六位字符，例如：FFFFFF", blank=True, null=True)
+
+    period = models.IntegerField(verbose_name="时期", help_text="从2007.9算起的第?学期", blank=True, null=True)
+    semester = models.IntegerField(verbose_name="学期", choices=semester_choice, blank=True, null=True,
+                                   help_text="从大一上算起的第?学期 ∈ [1,14]")
+    code = models.CharField(max_length=100, default='', help_text='课程编号(如CS21,ES22)', blank=True, null=True)
+    ch_name = models.CharField(verbose_name="中文名", max_length=100, help_text="课程中文名", blank=True, null=True)
+    en_name = models.CharField(verbose_name="English", max_length=100, help_text="课程英语名", blank=True, null=True)
+    fr_name = models.CharField(verbose_name="Français", max_length=100, help_text="课程法语名", blank=True, null=True)
+
     class Meta:
         verbose_name = '教学计划'
         verbose_name_plural = verbose_name
@@ -144,6 +154,15 @@ class CoursePlan(models.Model):
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
         self.teacher_name = self.teacher.name if self.teacher else None
+
+        self.color = self.info.type.color
+        self.period = self.info.period
+        self.semester = self.info.semester
+        self.code = self.info.code
+        self.ch_name = self.info.ch_name
+        self.en_name = self.info.en_name
+        self.fr_name = self.info.fr_name
+
         super(CoursePlan, self).save(force_insert, force_update, using, update_fields)
         for course in self.plan_course.all():
             course.save()

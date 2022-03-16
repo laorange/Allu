@@ -72,6 +72,7 @@ class CoursePlanAdmin(ImportExportModelAdmin):
     ordering = ['info', 'method']
     readonly_fields = ['teacher_name']
     resource_class = CoursePlanResource
+    fields = ['plan_id', 'teacher', 'info', 'groups', 'method']
 
     change_form_template = "admin/pdc_change_form.html"
     add_form_template = "admin/pdc_change_form.html"
