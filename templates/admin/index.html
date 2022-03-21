@@ -1,0 +1,18 @@
+{% extends 'admin/index.html' %}
+{% load static %}
+
+{% block script %}
+    {{ block.super }}
+    {#    预留脚本block 可以实现基础该页面，添加自定义脚本#}
+    <script>
+        window.onload = () => {
+            let newMenu = document.createElement("li");
+            newMenu.setAttribute("class", "el-menu-item");
+            newMenu.style.paddingLeft = "20px";
+            newMenu.innerHTML = `<i class="fa fa-compass"></i> <span>快速编辑</span>`;
+            let el_menu = document.querySelector(".el-menu");
+            el_menu.insertBefore(newMenu, el_menu.firstChild);
+            newMenu.addEventListener("click", () => window.open("/course/AlluAdmin/"));
+        }
+    </script>
+{% endblock %}

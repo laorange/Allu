@@ -1,12 +1,20 @@
 import datetime
 
 # from django.shortcuts import render
+from django.contrib.auth.decorators import permission_required
+from django.shortcuts import render
+
 from .models import Classroom, SemesterConfig
 from django.http.response import HttpResponseBadRequest, JsonResponse
 from .drf.serializers import ClassroomSerializer
 
 
 # Create your views here.
+@permission_required('is_staff')
+def alluAdmin(request):
+    return render(request, "vue/AlluAdmin.html")
+
+
 def advanced_classroom_api(request):
     try:
         all_classroom = Classroom.objects.all()
