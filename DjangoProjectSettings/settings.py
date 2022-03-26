@@ -191,3 +191,4 @@ SIMPLEUI_HOME_INFO = False
 
 SECURE_SSL_REDIRECT = not DEBUG
 
+LOGIN_URL = "/admin/login/"

@@ -144,6 +144,7 @@ class CoursePlan(models.Model):
     class Meta:
         verbose_name = '教学计划'
         verbose_name_plural = verbose_name
+        ordering = ("info", "method")
 
     def __str__(self):
         info_ls = [self.info.ch_name, self.get_method_display()]
@@ -263,6 +264,7 @@ class Course(CoursePlanChildModel):
     class Meta:
         verbose_name = '排课记录'
         verbose_name_plural = verbose_name
+        ordering = ['plan', 'date', 'which_lesson']
 
     def __str__(self):
         return "_".join([self.date.strftime("%Y-%m-%d "), self.get_which_lesson_display(), self.plan.__str__()])

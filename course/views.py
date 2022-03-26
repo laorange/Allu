@@ -1,7 +1,8 @@
 import datetime
 
 # from django.shortcuts import render
-from django.contrib.auth.decorators import permission_required
+# from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import render
 
 from .models import Classroom, SemesterConfig
@@ -10,7 +11,7 @@ from .drf.serializers import ClassroomSerializer
 
 
 # Create your views here.
-@permission_required('is_staff')
+@login_required
 def alluAdmin(request):
     return render(request, "vue/AlluAdmin.html")
 
