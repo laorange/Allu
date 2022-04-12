@@ -141,6 +141,8 @@ class CoursePlan(models.Model):
     en_name = models.CharField(verbose_name="English", max_length=100, help_text="课程英语名", blank=True, null=True)
     fr_name = models.CharField(verbose_name="Français", max_length=100, help_text="课程法语名", blank=True, null=True)
 
+    groups_name = models.CharField(verbose_name="分组名", max_length=200, blank=True, null=True)
+
     class Meta:
         verbose_name = '教学计划'
         verbose_name_plural = verbose_name
@@ -163,6 +165,8 @@ class CoursePlan(models.Model):
         self.ch_name = self.info.ch_name
         self.en_name = self.info.en_name
         self.fr_name = self.info.fr_name
+
+        self.groups_name = '&'.join(list(map(lambda group: group.name, self.groups.all())))
 
         super(CoursePlan, self).save(force_insert, force_update, using, update_fields)
         for course in self.plan_course.all():
@@ -207,6 +211,8 @@ class CoursePlanChildModel(models.Model):
     group_ids = models.CharField(verbose_name="分组", max_length=100, help_text="group_id(s),以字符串储存列表", blank=True, null=True)
     teacher_name = models.CharField(verbose_name="教师名", max_length=200, help_text="授课教师姓名", blank=True, null=True)
 
+    groups_name = models.CharField(verbose_name="分组名", max_length=200, blank=True, null=True)
+
     # endregion
 
     def activate_trigger_of_save(self):
@@ -219,6 +225,7 @@ class CoursePlanChildModel(models.Model):
         self.fr_name = self.plan.info.fr_name
         self.method = self.plan.method
         self.group_ids = str([group.group_id for group in self.plan.groups.all()])
+        self.groups_name = '&'.join(list(map(lambda group: group.name, self.plan.groups.all())))
         self.teacher_name = self.plan.teacher.name if self.plan.teacher else None
 
     class Meta:

@@ -81,7 +81,7 @@ class CoursePlanSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CoursePlan
-        fields = ['plan_id', 'teacher', 'info', 'groups', 'method', 'teacher_name',
+        fields = ['plan_id', 'teacher', 'info', 'groups', 'groups_name', 'method', 'teacher_name',
                   'color', 'period', 'semester', 'code', 'ch_name', 'en_name', 'fr_name']
 
 
@@ -98,7 +98,7 @@ class CourseChangeLogSerializer(serializers.ModelSerializer):
         model = CourseChangeLog
         fields = ['log_id', 'plan', 'action', 'description', 'update_time',
                   'color', 'period', 'semester', 'code', 'ch_name', 'en_name', 'fr_name',
-                  'method', 'group_ids', 'teacher_name']
+                  'method', 'group_ids', 'groups_name', 'teacher_name']
 
 
 class SemesterConfigSerializer(serializers.ModelSerializer):
@@ -121,7 +121,7 @@ class CourseSerializer(serializers.ModelSerializer):
         model = Course
         fields = ['course_id', 'plan', 'room', 'date', 'which_lesson', 'note', 'update_time',
                   'color', 'period', 'semester', 'code', 'ch_name', 'en_name', 'fr_name',
-                  'method', 'group_ids', 'teacher_name', 'room_name']
+                  'method', 'group_ids', 'groups_name', 'teacher_name', 'room_name']
 
 
 class CourseForPostSerializer(serializers.ModelSerializer):
