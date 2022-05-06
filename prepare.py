@@ -325,5 +325,9 @@ if __name__ == '__main__':
     # for log in tqdm(CourseChangeLog.objects.all()):
     #     log.save()
 
-    for t in tqdm(CoursePlan.objects.all()):
-        t.save()
+    # for t in tqdm(CoursePlan.objects.all()):
+    #     t.save()
+
+    for courseType in tqdm(CourseType.objects.all()):
+        courseType.color = "#" + courseType.color.strip('#').upper()
+        courseType.save()

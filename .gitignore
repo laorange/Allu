@@ -148,3 +148,4 @@ media/
 
 test*
 DjangoProjectSettings/secret.py
+/templates/vue/

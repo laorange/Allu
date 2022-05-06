@@ -137,12 +137,12 @@ class NoticeSerializer(serializers.ModelSerializer):
 
 
 # --------- EXTRA DETAIL (2D 3D...) ---------
-class CoursePlan2dSerializer(CoursePlanSerializer):
-    # plan_course = CourseSerializer(many=True, help_text="排课记录")
-
-    class Meta(CoursePlanSerializer.Meta):
-        fields = CoursePlanSerializer.Meta.fields + ["plan_course"]
-        depth = 1
+# class CoursePlan2dSerializer(CoursePlanSerializer):
+#     # plan_course = CourseSerializer(many=True, help_text="排课记录")
+#
+#     class Meta(CoursePlanSerializer.Meta):
+#         fields = CoursePlanSerializer.Meta.fields + ["plan_course"]
+#         depth = 1
 
 
 class CourseInfo2dSerializer(CourseInfoSerializer):
@@ -153,33 +153,33 @@ class CourseInfo2dSerializer(CourseInfoSerializer):
         depth = 1
 
 
-class CourseInfo3dSerializer(CourseInfo2dSerializer):
-    info_plan = CoursePlan2dSerializer(many=True, help_text="教学计划")
-
-    class Meta(CourseInfo2dSerializer.Meta):
-        pass
-
-
-class Classroom2dSerializer(ClassroomSerializer):
-    # room_course = CourseSerializer(many=True, help_text="排课记录")
-
-    class Meta(ClassroomSerializer.Meta):
-        fields = ClassroomSerializer.Meta.fields + ["room_course"]
-        depth = 1
-
-
-class Group2dSerializer(GroupSerializer):
-    group_plan = CoursePlan2dSerializer(many=True, help_text="教学计划")
-
-    class Meta(GroupSerializer.Meta):
-        fields = GroupSerializer.Meta.fields + ["group_plan"]
-
-
-class Course2dSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Course
-        fields = ['course_id', 'date', 'which_lesson', 'plan', 'room', 'update_time', "note"]
-        depth = 3
+# class CourseInfo3dSerializer(CourseInfo2dSerializer):
+#     info_plan = CoursePlan2dSerializer(many=True, help_text="教学计划")
+#
+#     class Meta(CourseInfo2dSerializer.Meta):
+#         pass
+#
+#
+# class Classroom2dSerializer(ClassroomSerializer):
+#     # room_course = CourseSerializer(many=True, help_text="排课记录")
+#
+#     class Meta(ClassroomSerializer.Meta):
+#         fields = ClassroomSerializer.Meta.fields + ["room_course"]
+#         depth = 1
+#
+#
+# class Group2dSerializer(GroupSerializer):
+#     group_plan = CoursePlan2dSerializer(many=True, help_text="教学计划")
+#
+#     class Meta(GroupSerializer.Meta):
+#         fields = GroupSerializer.Meta.fields + ["group_plan"]
+#
+#
+# class Course2dSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Course
+#         fields = ['course_id', 'date', 'which_lesson', 'plan', 'room', 'update_time', "note"]
+#         depth = 3
 
 
 # region - Finally here is the serializers_dict

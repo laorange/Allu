@@ -119,9 +119,9 @@ class NoticeFilter(MyFilter):
 
 
 # --------- EXTRA DETAIL (2D 3D...) ---------
-class CoursePlan2dFilter(CoursePlanFilter):
-    class Meta(CoursePlanFilter.Meta):
-        pass
+# class CoursePlan2dFilter(CoursePlanFilter):
+#     class Meta(CoursePlanFilter.Meta):
+#         pass
 
 
 class CourseInfo2dFilter(CourseInfoFilter):
@@ -129,43 +129,43 @@ class CourseInfo2dFilter(CourseInfoFilter):
         pass
 
 
-class CourseInfo3dFilter(CourseInfo2dFilter):
-    class Meta(CourseInfo2dFilter.Meta):
-        pass
+# class CourseInfo3dFilter(CourseInfo2dFilter):
+#     class Meta(CourseInfo2dFilter.Meta):
+#         pass
 
 
-class Classroom2dFilter(ClassroomFilter):
-    date = django_filters.DateFilter(field_name='room_course__date', help_text='上课日期')
-    which_lesson = django_filters.DateFilter(field_name='room_course__which_lesson', help_text='第?节课 ∈[1,5]')
+# class Classroom2dFilter(ClassroomFilter):
+#     date = django_filters.DateFilter(field_name='room_course__date', help_text='上课日期')
+#     which_lesson = django_filters.DateFilter(field_name='room_course__which_lesson', help_text='第?节课 ∈[1,5]')
+#
+#     class Meta(ClassroomFilter.Meta):
+#         fields = ClassroomFilter.Meta.fields + ["date", "which_lesson"]
+#
+#
+# class Group2dFilter(GroupFilter):
+#     class Meta(GroupFilter.Meta):
+#         pass
 
-    class Meta(ClassroomFilter.Meta):
-        fields = ClassroomFilter.Meta.fields + ["date", "which_lesson"]
 
-
-class Group2dFilter(GroupFilter):
-    class Meta(GroupFilter.Meta):
-        pass
-
-
-class Course2dFilter(CourseFilter):
-    type_id = django_filters.NumberFilter(field_name='plan__info__type_id', help_text='检索课程分类id')
-    period = django_filters.NumberFilter(field_name='plan__info__period', help_text='检索时期(从2007.9算起的第?学期)')
-    semester = django_filters.NumberFilter(field_name='plan__info__semester', help_text='检索开课学期 ∈ [1,14]')
-    ch_name = django_filters.CharFilter(field_name='plan__info__ch_name', lookup_expr='icontains', help_text='检索课程中文名')
-    en_name = django_filters.CharFilter(field_name='plan__info__en_name', lookup_expr='icontains', help_text='检索课程英语名')
-    fr_name = django_filters.CharFilter(field_name='plan__info__fr_name', lookup_expr='icontains', help_text='检索课程法语名')
-
-    teacher_id = django_filters.NumberFilter(field_name='plan__teacher_id', help_text='检索老师id')
-    teacher_name = django_filters.CharFilter(field_name='plan__teacher__name', lookup_expr='icontains', help_text='检索老师姓名')
-    method = django_filters.CharFilter(field_name='plan__method', help_text='检索授课方式：Course/TD/TP/Exam')
-
-    group = django_filters.NumberFilter(field_name='plan__groups__group_id', help_text='包含分组')
-
-    class Meta(CourseFilter.Meta):
-        fields = ['course_id', 'plan', 'room', 'date', "week", "what_day", 'which_lesson',
-                  "update_after", "update_before", "plan__groups", "after", "before",
-                  'type_id', 'semester', 'period', 'ch_name', 'en_name',
-                  'fr_name', 'teacher_id', 'teacher_name', 'method']
+# class Course2dFilter(CourseFilter):
+#     type_id = django_filters.NumberFilter(field_name='plan__info__type_id', help_text='检索课程分类id')
+#     period = django_filters.NumberFilter(field_name='plan__info__period', help_text='检索时期(从2007.9算起的第?学期)')
+#     semester = django_filters.NumberFilter(field_name='plan__info__semester', help_text='检索开课学期 ∈ [1,14]')
+#     ch_name = django_filters.CharFilter(field_name='plan__info__ch_name', lookup_expr='icontains', help_text='检索课程中文名')
+#     en_name = django_filters.CharFilter(field_name='plan__info__en_name', lookup_expr='icontains', help_text='检索课程英语名')
+#     fr_name = django_filters.CharFilter(field_name='plan__info__fr_name', lookup_expr='icontains', help_text='检索课程法语名')
+#
+#     teacher_id = django_filters.NumberFilter(field_name='plan__teacher_id', help_text='检索老师id')
+#     teacher_name = django_filters.CharFilter(field_name='plan__teacher__name', lookup_expr='icontains', help_text='检索老师姓名')
+#     method = django_filters.CharFilter(field_name='plan__method', help_text='检索授课方式：Course/TD/TP/Exam')
+#
+#     group = django_filters.NumberFilter(field_name='plan__groups__group_id', help_text='包含分组')
+#
+#     class Meta(CourseFilter.Meta):
+#         fields = ['course_id', 'plan', 'room', 'date', "week", "what_day", 'which_lesson',
+#                   "update_after", "update_before", "plan__groups", "after", "before",
+#                   'type_id', 'semester', 'period', 'ch_name', 'en_name',
+#                   'fr_name', 'teacher_id', 'teacher_name', 'method']
 
 
 # region - Finally here is the drf_containers

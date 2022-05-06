@@ -35,7 +35,7 @@ def get_period_display(period: int):
 class CourseType(models.Model):
     type_id = models.AutoField(primary_key=True, help_text="id")
     name = models.CharField(verbose_name="类型名", max_length=100, unique=True, help_text="类型名")
-    color = models.CharField(verbose_name="颜色", max_length=6, help_text="颜色，六位字符，例如：FFFFFF")
+    color = models.CharField(verbose_name="颜色", max_length=32, help_text="颜色，例如：#FFFFFF")
 
     class Meta:
         verbose_name = '课程类型'
@@ -63,7 +63,7 @@ class CourseInfo(models.Model):
     fr_name = models.CharField(verbose_name="Français", max_length=100, help_text="课程法语名", blank=True, null=True)
 
     # CourseType 存在这儿的
-    color = models.CharField(verbose_name="颜色", max_length=6, help_text="颜色，六位字符，例如：FFFFFF", blank=True, null=True)
+    color = models.CharField(verbose_name="颜色", max_length=32, help_text="颜色，例如：#FFFFFF", blank=True, null=True)
 
     class Meta:
         verbose_name = '课程信息'
@@ -131,7 +131,7 @@ class CoursePlan(models.Model):
     # Teacher表 存这儿的
     teacher_name = models.CharField(verbose_name="授课教师姓名", max_length=100, help_text="授课教师姓名", blank=True, null=True)
 
-    color = models.CharField(verbose_name="颜色", max_length=6, help_text="颜色，六位字符，例如：FFFFFF", blank=True, null=True)
+    color = models.CharField(verbose_name="颜色", max_length=32, help_text="颜色，例如：#FFFFFF", blank=True, null=True)
 
     period = models.IntegerField(verbose_name="时期", help_text="从2007.9算起的第?学期", blank=True, null=True)
     semester = models.IntegerField(verbose_name="学期", choices=semester_choice, blank=True, null=True,
@@ -197,7 +197,7 @@ class CoursePlanChildModel(models.Model):
                              related_name="toBeOverwritten", help_text="FK-toBeOverwritten")
 
     # region 别的表储存在此处的信息
-    color = models.CharField(verbose_name="颜色", max_length=6, help_text="颜色，六位字符，例如：FFFFFF", blank=True, null=True)
+    color = models.CharField(verbose_name="颜色", max_length=32, help_text="颜色，例如：#FFFFFF", blank=True, null=True)
 
     period = models.IntegerField(verbose_name="时期", help_text="从2007.9算起的第?学期", blank=True, null=True)
     semester = models.IntegerField(verbose_name="学期", choices=semester_choice, blank=True, null=True,
