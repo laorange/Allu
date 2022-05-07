@@ -1,5 +1,5 @@
 import datetime
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication  # , TokenAuthentication
 from rest_framework import serializers
 from rest_framework import viewsets
 
@@ -133,7 +133,7 @@ class CourseForPostSerializer(serializers.ModelSerializer):
 class NoticeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notice
-        fields = ['notice_id', 'content', 'link', "priority", 'validity', 'update_time']
+        fields = ['notice_id', 'label', 'content', 'link', "priority", 'validity', 'update_time']
 
 
 # --------- EXTRA DETAIL (2D 3D...) ---------

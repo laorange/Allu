@@ -274,7 +274,7 @@ class Course(CoursePlanChildModel):
         ordering = ['plan', 'date', 'which_lesson']
 
     def __str__(self):
-        return "_".join([self.date.strftime("%Y-%m-%d "), self.get_which_lesson_display(), self.plan.__str__()])
+        return " ".join([self.date.strftime("%Y-%m-%d"), self.get_which_lesson_display(), self.plan.__str__()])
 
     def delete(self, *args, **kwargs):
         description = f"删除：{self.date}{self.get_which_lesson_display()}的{self.plan}"
@@ -316,6 +316,7 @@ class SemesterConfig(models.Model):
 
 class Notice(models.Model):
     notice_id = models.AutoField(primary_key=True, help_text="id")
+    label = models.CharField(verbose_name="标签", max_length=255, null=True, blank=True)
     content = models.CharField(verbose_name="描述", max_length=255, help_text="对本次变动的描述")
     link = models.TextField(verbose_name="链接", help_text="点击通知时跳转链接", blank=True, null=True)
     priority = models.IntegerField(verbose_name="优先级", help_text="数字越大优先级越高", default=1)
