@@ -317,7 +317,7 @@ class SemesterConfig(models.Model):
 class Notice(models.Model):
     notice_id = models.AutoField(primary_key=True, help_text="id")
     label = models.CharField(verbose_name="标签", max_length=255, null=True, blank=True)
-    content = models.CharField(verbose_name="描述", max_length=255, help_text="对本次变动的描述")
+    content = models.CharField(verbose_name="通知内容", max_length=255)
     link = models.TextField(verbose_name="链接", help_text="点击通知时跳转链接", blank=True, null=True)
     priority = models.IntegerField(verbose_name="优先级", help_text="数字越大优先级越高", default=1)
     validity = models.BooleanField(verbose_name="是否生效", default=True, help_text="是否生效")
