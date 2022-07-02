@@ -1,0 +1,1 @@
+const e={key:"v-9e6b35e4",path:"/fr-FR/guide/",title:"D\xE9sol\xE9",lang:"fr-FR",frontmatter:{},excerpt:"",headers:[{level:1,title:"D\xE9sol\xE9",slug:"desole",children:[]}],git:{updatedTime:1648374362e3},filePathRelative:"fr-FR/guide/README.md"};export{e as data};
