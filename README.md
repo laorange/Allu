@@ -1,4 +1,6 @@
-# *ALLU* —— SIAE课程管理系统v4
+# Allumettre —— SIAE课程管理系统
+
+> 基于 `Django`框架 的后端
 
 ## 项目背景
 
@@ -29,4 +31,4 @@ A：每学期都有对应的“学期戳”(灵感来源于**时间戳**)，记2
 
 ## 数据库结构
 
-![database](static/README/database.png)
+![database](database.png)
